@@ -1,0 +1,2510 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no,maximum-scale=1">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="КМ·Инженер">
+<meta name="theme-color" content="#0a84ff">
+<meta name="mobile-web-app-capable" content="yes">
+<title>КМ·Инженер — АО «Коломенский завод»</title>
+<link href="https://fonts.googleapis.com/css2?family=Russo+One&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f5f8fc;--card:#fff;--card2:#e9eff7;--card3:#d7e2f0;--sep:rgba(60,90,140,.18);--label:#0c1b33;--label2:rgba(12,27,51,.62);--label3:rgba(12,27,51,.35);--blue:#0a84ff;--blue-l:#5fc9f5;--green:#28b36b;--orange:#ff9f0a;--cyan:#0aa9d6;--purple:#8e6cf0;--red:#ff3b30;--gray:#8fa3bd;--sat:env(safe-area-inset-top,0);--sab:env(safe-area-inset-bottom,0)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#02070f;--card:#0b1626;--card2:#12203a;--card3:#1a2f52;--sep:rgba(120,160,220,.16);--label:#eef4fc;--label2:rgba(238,244,252,.6);--label3:rgba(238,244,252,.32);--gray:#6f83a3}}
+[data-theme="dark"]{--bg:#02070f;--card:#0b1626;--card2:#12203a;--card3:#1a2f52;--sep:rgba(120,160,220,.16);--label:#eef4fc;--label2:rgba(238,244,252,.6);--label3:rgba(238,244,252,.32);--gray:#6f83a3}
+[data-theme="light"]{--bg:#f5f8fc;--card:#fff;--card2:#e9eff7;--card3:#d7e2f0;--sep:rgba(60,90,140,.18);--label:#0c1b33;--label2:rgba(12,27,51,.62);--label3:rgba(12,27,51,.35);--gray:#8fa3bd}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overflow:hidden}
+body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,sans-serif;background:var(--bg);color:var(--label);-webkit-font-smoothing:antialiased}
+button,input,select,textarea{font-family:inherit;color:inherit;font-size:inherit}
+button{background:none;border:0;cursor:pointer}
+.disp{font-family:"Russo One",sans-serif;font-weight:400}
+::-webkit-scrollbar{display:none}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@keyframes pop{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes pulse{50%{opacity:.35}}
+@keyframes blink{0%,80%,100%{opacity:.25}40%{opacity:1}}
+@keyframes ring{0%{box-shadow:0 0 0 0 rgba(10,132,255,.5)}100%{box-shadow:0 0 0 26px rgba(10,132,255,0)}}
+@keyframes shake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-8px)}40%,80%{transform:translateX(8px)}}
+.press{transition:transform .15s}.press:active{transform:scale(.97)}
+.hidden{display:none!important}
+#app{position:fixed;inset:0;overflow:hidden;display:flex;flex-direction:column}
+.splash{position:absolute;inset:0;background:linear-gradient(160deg,#031a3d,#02070f 65%);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:1000;padding:24px}
+.splash .logo{width:96px;height:96px;border-radius:26px;background:linear-gradient(150deg,#5fc9f5,#0a84ff);display:grid;place-items:center;font-size:46px;margin-bottom:24px;animation:pop .6s}
+.splash h1{font-family:"Russo One";font-size:30px;color:#fff;margin-bottom:8px}
+.splash p{color:rgba(255,255,255,.6);font-size:13px;margin-bottom:40px;text-align:center}
+.splash .bar{width:240px;height:3px;background:rgba(255,255,255,.1);border-radius:2px;overflow:hidden;margin-bottom:14px}
+.splash .bar i{display:block;height:100%;background:linear-gradient(90deg,#5fc9f5,#0a84ff);width:0;transition:width .3s}
+.splash .status{color:rgba(255,255,255,.4);font-size:11px;min-height:14px}
+.lock{position:absolute;inset:0;background:linear-gradient(160deg,#031a3d,#02070f 70%);z-index:1100;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px}
+.lock .lk-ico{width:70px;height:70px;border-radius:20px;background:linear-gradient(150deg,#5fc9f5,#0a84ff);display:grid;place-items:center;font-size:34px;margin-bottom:20px}
+.lock h2{color:#fff;font-family:"Russo One";font-size:22px;margin-bottom:6px}
+.lock .sub{color:rgba(255,255,255,.5);font-size:13px;margin-bottom:28px}
+.pin-dots{display:flex;gap:16px;margin-bottom:32px}
+.pin-dots i{width:14px;height:14px;border-radius:50%;border:2px solid rgba(255,255,255,.4);transition:.2s}
+.pin-dots i.on{background:#fff;border-color:#fff}
+.pin-dots.err{animation:shake .4s}
+.pin-pad{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.pin-pad button{width:72px;height:72px;border-radius:50%;background:rgba(255,255,255,.1);color:#fff;font-size:26px;font-weight:600}
+.pin-pad button:active{background:rgba(255,255,255,.3)}
+.pin-pad button.fn{background:transparent;font-size:13px}
+.onboard{position:absolute;inset:0;background:var(--bg);z-index:900;display:flex;flex-direction:column;padding-top:var(--sat)}
+.ob-slide{flex:1;display:none;flex-direction:column;align-items:center;justify-content:center;padding:40px 28px;text-align:center}
+.ob-slide.on{display:flex;animation:fade .4s}
+.ob-ico{width:140px;height:140px;border-radius:40px;display:grid;place-items:center;font-size:70px;margin-bottom:36px}
+.ob-ico.b{background:linear-gradient(150deg,#5fc9f5,#0a84ff)}
+.ob-ico.g{background:linear-gradient(150deg,#35d07f,#1a8f52)}
+.ob-slide h2{font-family:"Russo One";font-size:27px;margin-bottom:14px}
+.ob-slide p{color:var(--label2);font-size:16px;line-height:1.5;max-width:340px;margin-bottom:36px}
+.ob-dots{display:flex;gap:8px;margin-bottom:20px}
+.ob-dots i{width:8px;height:8px;border-radius:50%;background:var(--card3)}
+.ob-dots i.on{background:var(--blue);width:24px;border-radius:4px}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;padding:14px;border-radius:14px;font-size:16px;font-weight:600;min-height:50px}
+.btn.b{background:var(--blue);color:#fff}
+.btn.card{background:var(--card2);color:var(--label)}
+.btn.full{width:100%}
+.btn.sm{padding:9px 14px;font-size:14px;min-height:36px;border-radius:11px;width:auto}
+.auth{position:absolute;inset:0;background:var(--bg);z-index:800;display:flex;flex-direction:column;padding:calc(24px + var(--sat)) 24px calc(24px + var(--sab));overflow-y:auto}
+.auth h2{font-family:"Russo One";font-size:28px;margin-bottom:6px}
+.auth .sub{color:var(--label2);font-size:14px;margin-bottom:28px}
+.fld{margin-bottom:14px}
+.fld label{display:block;font-size:12px;font-weight:600;text-transform:uppercase;color:var(--label2);margin-bottom:6px}
+.fld input,.fld select,.fld textarea{width:100%;background:var(--card);border:1px solid var(--sep);color:var(--label);padding:13px 15px;border-radius:12px;outline:none;font-size:16px}
+.check{display:flex;gap:10px;font-size:13px;color:var(--label2);margin:16px 0;line-height:1.4}
+.check input{width:20px;height:20px;flex:none;margin-top:1px;accent-color:var(--blue)}
+.toggle-mode{display:flex;background:var(--card2);border-radius:12px;padding:4px;gap:2px;margin-bottom:22px}
+.toggle-mode button{flex:1;padding:11px;border-radius:9px;font-size:14px;font-weight:600;color:var(--label2)}
+.toggle-mode button.on{background:var(--blue);color:#fff}
+.auth-link{text-align:center;margin-top:18px;font-size:13px;color:var(--label2)}
+.auth-link a{color:var(--blue);font-weight:600}
+.err{background:rgba(255,59,48,.1);color:var(--red);padding:10px 14px;border-radius:10px;font-size:13px;margin-bottom:14px}
+.main{flex:1;display:flex;flex-direction:column;min-height:0;position:relative}
+.view{flex:1;overflow-y:auto;padding:calc(10px + var(--sat)) 16px calc(92px + var(--sab));display:none}
+.view.on{display:block;animation:fade .25s}
+.large-title{font-size:34px;font-weight:800;line-height:1.1;padding:calc(14px + var(--sat)) 16px 6px}
+.hdr{display:flex;align-items:center;gap:10px;padding:8px 16px 10px}
+.hdr-btn{width:40px;height:40px;border-radius:50%;background:var(--card);display:grid;place-items:center;position:relative;flex:none}
+.hdr-btn svg{width:20px;height:20px;stroke:var(--label);fill:none;stroke-width:1.8}
+.bdot{position:absolute;top:-2px;right:-2px;background:var(--blue);color:#fff;font-size:9px;font-weight:700;min-width:16px;height:16px;border-radius:8px;display:grid;place-items:center;border:2px solid var(--bg)}
+.tabbar{position:absolute;left:0;right:0;bottom:0;z-index:30;display:flex;padding:6px 8px calc(6px + var(--sab));background:rgba(255,255,255,.85);backdrop-filter:blur(24px);border-top:1px solid var(--sep)}
+[data-theme="dark"] .tabbar{background:rgba(6,14,28,.85)}
+.tbtn{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;color:var(--gray);font-size:10px;font-weight:600;padding:5px 0;position:relative}
+.tbtn svg{width:25px;height:25px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.tbtn.on{color:var(--blue)}
+.tbtn .tb{position:absolute;top:-2px;left:calc(50% + 8px);background:var(--blue);color:#fff;font-size:9px;font-weight:700;min-width:16px;height:16px;border-radius:8px;display:grid;place-items:center}
+.card{background:var(--card);border-radius:16px;overflow:hidden;margin-bottom:14px}
+.grow{display:flex;align-items:center;gap:12px;padding:13px 14px;position:relative;min-height:48px;text-align:left;width:100%}
+.grow+.grow::before{content:"";position:absolute;top:0;left:56px;right:0;height:1px;background:var(--sep)}
+.ava{width:42px;height:42px;flex:none;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:14px;color:#fff;position:relative}
+.ava.sm{width:32px;height:32px;font-size:11px}
+.ava.lg{width:76px;height:76px;font-size:24px}
+.ava.b1{background:linear-gradient(150deg,#5fc9f5,#0a84ff)}
+.ava.b2{background:linear-gradient(150deg,#0a84ff,#0055d4)}
+.ava.b3{background:linear-gradient(150deg,#35d07f,#1a8f52)}
+.ava.b4{background:linear-gradient(150deg,#8e6cf0,#5c3fd4)}
+.ava.b5{background:linear-gradient(150deg,#0aa9d6,#067a9c)}
+.ava.b6{background:linear-gradient(150deg,#ffb84d,#e07a00)}
+.ava.gray{background:var(--card3);color:var(--label)}
+.pres{position:absolute;bottom:0;right:0;width:11px;height:11px;border-radius:50%;border:2px solid var(--card)}
+.pres.on{background:var(--green)}.pres.away{background:var(--orange)}.pres.off{background:var(--gray)}
+.tag{display:inline-block;font-size:10.5px;font-weight:700;padding:3px 8px;border-radius:6px;white-space:nowrap}
+.tg-r{background:rgba(255,59,48,.14);color:var(--red)}.tg-g{background:rgba(40,179,107,.14);color:var(--green)}
+.tg-o{background:rgba(255,159,10,.15);color:var(--orange)}.tg-c{background:rgba(10,169,214,.14);color:var(--cyan)}
+.tg-b{background:rgba(10,132,255,.14);color:var(--blue)}.tg-p{background:rgba(142,108,240,.14);color:var(--purple)}
+.tg-gr{background:rgba(143,163,189,.16);color:var(--gray)}
+.seg{display:flex;background:rgba(120,150,190,.16);border-radius:10px;padding:2px;gap:2px;margin-bottom:14px}
+.seg button{flex:1;font-size:12.5px;font-weight:600;padding:7px 2px;border-radius:8px;color:var(--label2)}
+.seg button.on{background:var(--card);color:var(--blue)}
+.tgl{width:51px;height:31px;border-radius:16px;background:rgba(120,140,170,.35);position:relative;transition:.25s;flex:none}
+.tgl::after{content:"";position:absolute;top:2px;left:2px;width:27px;height:27px;border-radius:50%;background:#fff;transition:.25s}
+.tgl.on{background:var(--blue)}.tgl.on::after{left:22px}
+.gtitle{font-size:12px;text-transform:uppercase;letter-spacing:.07em;color:var(--label3);padding:20px 8px 8px;font-weight:600}
+.search{display:flex;align-items:center;gap:8px;background:var(--card2);border-radius:12px;padding:10px 12px;margin-bottom:14px}
+.search input{flex:1;background:none;border:0;outline:none;color:var(--label);font-size:16px}
+.empty{text-align:center;color:var(--label3);font-size:13px;padding:30px 10px}
+.stat-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.stat{background:var(--card);border-radius:14px;padding:14px}
+.stat small{font-size:11px;color:var(--label2);text-transform:uppercase;font-weight:600;display:block;margin-bottom:6px}
+.stat b{font-family:"Russo One";font-size:24px}
+.stat b em{font-style:normal;font-size:13px;color:var(--label3)}
+.hero{position:relative;overflow:hidden;border-radius:22px;padding:20px;margin:4px 0 16px;color:#fff;background:linear-gradient(140deg,#5fc9f5,#0a84ff 45%,#0055d4)}
+.hero .live{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;background:rgba(0,0,0,.22);padding:5px 10px;border-radius:20px;margin-bottom:10px}
+.hero .live i{width:7px;height:7px;border-radius:50%;background:#7dffb0;animation:pulse 1.8s infinite}
+.hero h3{font-family:"Russo One";font-size:22px;margin-bottom:6px}
+.hero p{font-size:13.5px;color:rgba(255,255,255,.9);max-width:280px;line-height:1.45}
+.hscroll{display:flex;gap:12px;overflow-x:auto;margin:0 -16px;padding:6px 16px 12px}
+.hcard{min-width:160px;background:var(--card);border-radius:16px;padding:14px;flex:none}
+.hcard small{font-size:11px;color:var(--label2);text-transform:uppercase;font-weight:600;display:block;margin-bottom:8px}
+.hcard .num{font-family:"Russo One";font-size:26px;margin-bottom:10px}
+.hcard .num em{font-style:normal;font-size:13px;color:var(--label3)}
+.pbar{height:4px;background:var(--card3);border-radius:2px;overflow:hidden}
+.pbar i{display:block;height:100%;background:var(--blue)}
+.pbar i.g{background:var(--green)}.pbar i.o{background:var(--orange)}.pbar i.c{background:var(--cyan)}
+.chip{flex:none;font-size:13px;padding:9px 14px;border-radius:20px;background:var(--card);border:1px solid var(--sep);color:var(--label);white-space:nowrap}
+.chip.on{background:var(--blue);color:#fff;border-color:var(--blue)}
+.dim{position:absolute;inset:0;background:rgba(2,10,25,.55);z-index:45;opacity:0;pointer-events:none;transition:.3s}
+.dim.on{opacity:1;pointer-events:auto}
+.sheet{position:absolute;left:0;right:0;bottom:0;z-index:50;background:var(--card);border-radius:22px 22px 0 0;transform:translateY(105%);transition:transform .4s;max-height:88%;display:flex;flex-direction:column;padding-bottom:calc(14px + var(--sab))}
+.sheet.on{transform:none}
+.grab{width:38px;height:5px;border-radius:3px;background:var(--card3);margin:8px auto 4px}
+.sheet .sh-hd{padding:6px 18px 12px;display:flex;align-items:center;gap:10px}
+.sheet .sh-hd h4{font-size:19px;font-weight:800;flex:1}
+.sheet .sh-hd button{color:var(--blue);font-size:16px;font-weight:600}
+.sh-body{flex:1;min-height:0;overflow-y:auto;padding:0 18px 14px}
+.page{position:absolute;inset:0;z-index:40;background:var(--bg);display:flex;flex-direction:column;transform:translateX(103%);transition:transform .4s}
+.page.on{transform:none}
+.nav{display:flex;align-items:center;gap:4px;padding:calc(14px + var(--sat)) 10px 10px;background:var(--card);border-bottom:1px solid var(--sep)}
+.back{display:flex;align-items:center;color:var(--blue);font-size:16px;font-weight:600;padding:6px 10px}
+.back .ch{font-size:24px;line-height:0;margin-right:2px}
+.nav-title{flex:1;text-align:center;font-size:16px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.nav-sp{width:70px}
+.pg-body{flex:1;min-height:0;overflow-y:auto;padding:14px 16px calc(24px + var(--sab))}
+.msg{padding:14px;border-bottom:1px solid var(--sep);display:flex;gap:12px;align-items:flex-start}
+.msg.un{background:rgba(10,132,255,.06)}
+.msg .ico{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;font-size:20px;flex:none}
+.msg b{font-size:15px;font-weight:600;display:block;margin-bottom:3px}
+.msg small{font-size:13px;color:var(--label2);line-height:1.4;display:block;max-height:36px;overflow:hidden}
+.msg .t{margin-left:auto;font-size:11px;color:var(--gray);flex:none;text-align:right}
+.msg .ub{background:var(--blue);color:#fff;font-size:10px;font-weight:700;min-width:18px;height:18px;border-radius:9px;display:grid;place-items:center;margin-top:4px;margin-left:auto}
+.chat-hd{display:flex;align-items:center;gap:12px;padding:14px 16px;background:var(--card);border-radius:16px;margin-bottom:14px}
+.chat-hd .ava{width:54px;height:54px;font-size:18px}
+.chat-hd b{font-size:17px;font-weight:700;display:block;margin-bottom:2px}
+.chat-hd small{font-size:12px;color:var(--label2)}
+.chat-msgs{flex:1;min-height:0;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:8px}
+.mrow{display:flex;flex-direction:column;animation:pop .3s both;position:relative}
+.mrow.me{align-items:flex-end}
+.bub{max-width:82%;padding:10px 14px;font-size:15px;line-height:1.42;border-radius:19px;word-break:break-word}
+.bub.me{background:var(--blue);color:#fff;border-bottom-right-radius:6px}
+.bub.them{background:var(--card2);color:var(--label);border-bottom-left-radius:6px}
+.bub .tm{display:block;font-size:10px;opacity:.6;margin-top:4px;text-align:right}
+.react-add{position:absolute;top:-14px;right:8px;width:26px;height:26px;border-radius:50%;background:var(--card);box-shadow:0 2px 8px rgba(0,0,0,.15);display:grid;place-items:center;font-size:13px;opacity:0;transition:.2s}
+.mrow:hover .react-add,.mrow:focus-within .react-add{opacity:1}
+.mrow.me .react-add{right:auto;left:8px}
+.react-pop{position:absolute;bottom:100%;right:0;background:var(--card);border-radius:20px;box-shadow:0 8px 24px rgba(0,0,0,.2);display:flex;gap:2px;padding:6px 8px;z-index:5;margin-bottom:4px}
+.react-pop button{font-size:20px;padding:2px 4px}
+.react-row{display:flex;gap:4px;margin-top:4px}
+.react-chip{background:var(--card2);border-radius:12px;padding:3px 8px;font-size:13px}
+.chat-input{display:flex;gap:8px;align-items:flex-end;padding:10px 12px calc(12px + var(--sab));border-top:1px solid var(--sep);background:var(--bg);position:relative}
+.chat-input .inp{flex:1;background:var(--card2);border:1px solid var(--sep);color:var(--label);font-size:16px;padding:11px 14px;border-radius:20px;outline:none;max-height:100px;overflow-y:auto;min-height:40px;resize:none}
+.chat-input button{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;flex:none}
+.chat-input svg{width:19px;height:19px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.chat-input .mic{background:var(--card2)}
+.chat-input .mic svg{stroke:var(--label)}
+.chat-input .mic.rec{background:var(--red);animation:pulse 1s infinite}
+.chat-input .mic.rec svg{stroke:#fff}
+.chat-input .send{background:var(--blue)}
+.tcard{background:var(--card);border-radius:16px;padding:14px;margin-bottom:10px}
+.tcard .r1{display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap}
+.tcard .tid{font-family:ui-monospace,monospace;font-size:11px;color:var(--blue);font-weight:600}
+.tcard .due{margin-left:auto;font-size:11px;color:var(--gray)}
+.tcard .due.late{color:var(--red)}
+.tcard b.tt{font-size:15px;font-weight:600;display:block;line-height:1.4;margin-bottom:10px}
+.tcard .desc{font-size:13px;color:var(--label2);margin-bottom:12px;line-height:1.4}
+.who{display:flex;align-items:center;gap:7px;background:var(--card2);border-radius:20px;padding:3px 11px 3px 3px;font-size:12.5px;font-weight:600}
+.who .ava{width:22px;height:22px;font-size:9px}
+.stage{display:flex;gap:4px;margin-top:12px;padding-top:12px;border-top:1px solid var(--sep)}
+.stage .step{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;position:relative}
+.stage .step::before{content:"";position:absolute;top:9px;left:-50%;right:50%;height:2px;background:var(--card3)}
+.stage .step:first-child::before{display:none}
+.stage .step.done::before{background:var(--green)}
+.stage .step.on::before{background:var(--orange)}
+.stage .step .dot{width:20px;height:20px;border-radius:50%;background:var(--card3);display:grid;place-items:center;font-size:10px;color:#fff;z-index:1;position:relative}
+.stage .step.done .dot{background:var(--green)}
+.stage .step.on .dot{background:var(--orange)}
+.stage .step b{font-size:9.5px;color:var(--label2);text-transform:uppercase}
+.check-item{display:flex;align-items:center;gap:10px;padding:9px 2px;border-bottom:1px solid var(--sep)}
+.check-item:last-child{border-bottom:0}
+.check-box{width:22px;height:22px;border-radius:7px;border:2px solid var(--gray);display:grid;place-items:center;flex:none;color:#fff;font-size:13px}
+.check-item.done .check-box{background:var(--green);border-color:var(--green)}
+.check-item.done .check-txt{text-decoration:line-through;color:var(--label3)}
+.check-txt{flex:1;font-size:14px}
+.check-del{color:var(--gray);font-size:16px;padding:2px 6px}
+.add-check{display:flex;gap:8px;margin-top:10px}
+.add-check input{flex:1;background:var(--card2);border:1px solid var(--sep);color:var(--label);padding:10px 14px;border-radius:10px;outline:none;font-size:14px}
+.add-check button{background:var(--blue);color:#fff;border-radius:10px;padding:0 16px;font-weight:600}
+.scard{display:flex;align-items:center;gap:12px;padding:13px 14px;background:var(--card);border-radius:14px;margin-bottom:8px}
+.scard .ava{width:46px;height:46px;font-size:15px}
+.scard b{font-size:15px;font-weight:600;display:block;margin-bottom:2px}
+.scard small{font-size:12.5px;color:var(--label2);display:block}
+.scard .acts{margin-left:auto;display:flex;gap:6px}
+.scard .acts button{width:36px;height:36px;border-radius:50%;background:var(--card2);display:grid;place-items:center}
+.scard .acts svg{width:17px;height:17px;fill:none;stroke-width:2}
+.fav-btn{color:var(--gray);font-size:20px;padding:4px}
+.fav-btn.on{color:var(--orange)}
+.gs-group{margin-bottom:8px}
+.gs-head{font-size:12px;text-transform:uppercase;color:var(--label3);font-weight:700;padding:10px 4px 6px}
+.gs-item{display:flex;align-items:center;gap:12px;padding:12px;background:var(--card);border-radius:12px;margin-bottom:6px;width:100%;text-align:left}
+.gs-item .gi{width:38px;height:38px;border-radius:10px;display:grid;place-items:center;font-size:18px;flex:none}
+.gs-item b{font-size:14px;display:block}
+.gs-item small{font-size:12px;color:var(--label2)}
+.notif-item{display:flex;gap:12px;padding:14px;background:var(--card);border-radius:14px;margin-bottom:8px;align-items:flex-start}
+.notif-item .ni{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;font-size:18px;flex:none}
+.notif-item b{font-size:14px;display:block;margin-bottom:2px}
+.notif-item small{font-size:12.5px;color:var(--label2)}
+.notif-item .nt{margin-left:auto;font-size:11px;color:var(--gray)}
+.notif-item.urgent{border-left:3px solid var(--red)}
+.call-body{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:20px}
+.call-ava{width:120px;height:120px;border-radius:50%;display:grid;place-items:center;font-size:40px;font-weight:700;color:#fff;animation:ring 1.6s infinite}
+.call-ava.connected{animation:none}
+.vcs-ctrl{display:flex;justify-content:center;gap:14px;padding:16px;flex-wrap:wrap}
+.vcs-ctrl button{width:54px;height:54px;border-radius:50%;background:var(--card2);display:grid;place-items:center}
+.vcs-ctrl svg{width:22px;height:22px;stroke:var(--label);fill:none;stroke-width:2}
+.vcs-ctrl button.on{background:var(--blue)}
+.vcs-ctrl button.end{background:var(--blue);width:64px;border-radius:28px}
+.vcs-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:10px;margin-bottom:12px}
+.vcs-tile{aspect-ratio:1;background:#0c1a30;border-radius:14px;position:relative;overflow:hidden;display:grid;place-items:center;color:#fff}
+.vcs-tile video{width:100%;height:100%;object-fit:cover}
+.vcs-tile .nm{position:absolute;left:8px;bottom:6px;background:rgba(0,0,0,.6);padding:3px 8px;border-radius:8px;font-size:11px}
+.vcs-timer{text-align:center;font-family:ui-monospace,monospace;font-size:14px;color:var(--label2);margin-bottom:10px}
+.telem-card{background:var(--card);border-radius:16px;padding:14px;margin-bottom:10px}
+.telem-card .hd{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.telem-card .ld{width:10px;height:10px;border-radius:50%;background:var(--green);animation:pulse 1.8s infinite}
+.telem-card .ld.w{background:var(--orange)}
+.telem-card .hd b{font-size:14px;font-weight:600;flex:1}
+.telem-card .hd small{color:var(--label2);font-size:11px}
+.telem-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:8px}
+.telem-m{background:var(--card2);border-radius:8px;padding:8px;text-align:center}
+.telem-m small{font-size:9.5px;color:var(--label2);text-transform:uppercase;display:block;margin-bottom:2px}
+.telem-m b{font-family:ui-monospace,monospace;font-size:14px}
+.spark{width:100%;height:30px;display:block}
+.predict-card{background:var(--card);border-radius:16px;padding:16px;margin-bottom:10px;border-left:4px solid var(--orange)}
+.predict-card.crit{border-left-color:var(--red)}
+.predict-card.ok{border-left-color:var(--green)}
+.predict-card .pc-top{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.predict-card b{font-size:15px;flex:1}
+.prob-bar{height:8px;background:var(--card3);border-radius:4px;overflow:hidden;margin:8px 0}
+.prob-bar i{display:block;height:100%;border-radius:4px}
+.chain-card{background:var(--card);border-radius:16px;padding:14px;margin-bottom:10px}
+.chain-step{display:flex;gap:10px;padding:8px 0;position:relative}
+.chain-step::before{content:"";position:absolute;left:13px;top:32px;bottom:-8px;width:2px;background:var(--card3)}
+.chain-step:last-child::before{display:none}
+.chain-step .cs-i{width:28px;height:28px;border-radius:50%;background:var(--green);color:#fff;display:grid;place-items:center;font-size:13px;flex:none;z-index:1}
+.chain-step .cs-t{flex:1}
+.chain-step .cs-t b{font-size:13px;display:block}
+.chain-step .cs-t small{font-size:11px;color:var(--label2)}
+.stock-row{display:flex;align-items:center;gap:12px;padding:13px;background:var(--card);border-radius:14px;margin-bottom:8px}
+.stock-row .st-i{width:42px;height:42px;border-radius:12px;background:var(--card2);display:grid;place-items:center;font-size:20px}
+.stock-row b{font-size:14px;display:block}
+.stock-row small{font-size:12px;color:var(--label2)}
+.stock-lvl{margin-left:auto;text-align:right;min-width:70px}
+.stock-lvl b{font-family:ui-monospace,monospace;font-size:15px}
+.idea-card{background:var(--card);border-radius:16px;padding:14px;margin-bottom:10px}
+.idea-card .vote{display:flex;align-items:center;gap:6px;background:var(--card2);border-radius:20px;padding:6px 12px;font-weight:700}
+.idea-card .vote.voted{background:rgba(10,132,255,.18);color:var(--blue)}
+.rating-row{display:flex;align-items:center;gap:12px;padding:12px;background:var(--card);border-radius:14px;margin-bottom:8px}
+.rating-row .rank{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:15px;background:var(--card2)}
+.rating-row .rank.r1{background:linear-gradient(150deg,#ffd700,#e0a000);color:#000}
+.rating-row .rank.r2{background:linear-gradient(150deg,#e0e0e0,#a0a0a0);color:#000}
+.rating-row .rank.r3{background:linear-gradient(150deg,#e0a060,#b07030);color:#000}
+.permit-card{background:var(--card);border-radius:16px;padding:14px;margin-bottom:10px;border-left:4px solid var(--orange)}
+.permit-card.active{border-left-color:var(--green)}
+.permit-card.closed{border-left-color:var(--gray);opacity:.7}
+.form-op{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--sep)}
+.form-op:last-child{border-bottom:0}
+.form-op .fo-dot{width:12px;height:12px;border-radius:50%;background:var(--blue);margin-top:4px;flex:none}
+.form-op .fo-t{flex:1}
+.form-op .fo-t b{font-size:14px;display:block}
+.form-op .fo-t small{font-size:12px;color:var(--label2)}
+.form-op .fo-d{font-size:11px;color:var(--gray)}
+.feat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.feat-card{background:var(--card);border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:8px;text-align:left}
+.feat-card .fi{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;font-size:22px}
+.feat-card b{font-size:14px;font-weight:700}
+.feat-card small{font-size:11px;color:var(--label2);line-height:1.3}
+.news-card{background:var(--card);border-radius:16px;overflow:hidden;margin-bottom:14px}
+.news-img{height:120px;display:grid;place-items:center;font-size:56px}
+.news-body{padding:14px}
+.news-body b{font-size:16px;font-weight:700;display:block;margin:8px 0 6px;line-height:1.3}
+.news-body p{font-size:13px;color:var(--label2);line-height:1.45}
+.news-meta{display:flex;justify-content:space-between;margin-top:10px;font-size:11px;color:var(--gray)}
+.cal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.cal-head b{font-size:17px;font-weight:700;text-transform:capitalize}
+.cal-head button{width:36px;height:36px;border-radius:50%;background:var(--card2);color:var(--blue);font-size:18px}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.cal-dow{text-align:center;font-size:10px;font-weight:700;color:var(--label3);padding:6px 0;text-transform:uppercase}
+.cal-day{aspect-ratio:1;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:14px;position:relative;background:var(--card)}
+.cal-day.other{opacity:.3}
+.cal-day.today{background:var(--blue);color:#fff;font-weight:700}
+.cal-day.sel{outline:2px solid var(--blue)}
+.week{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-bottom:14px}
+.wd{background:var(--card2);border-radius:8px;padding:8px 2px;text-align:center;font-size:9.5px;color:var(--label3)}
+.wd b{display:block;font-family:ui-monospace,monospace;font-size:13px;color:var(--label);margin-bottom:2px}
+.wd.sh{background:rgba(10,132,255,.12)}.wd.sh b{color:var(--blue)}
+.badges{display:flex;flex-wrap:wrap;gap:8px}
+.badge{background:var(--card2);border-radius:12px;padding:10px 12px;display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600}
+.badge i{font-size:22px;font-style:normal}
+.progress{width:100%;height:6px;background:var(--card3);border-radius:3px;overflow:hidden;margin:6px 0}
+.progress i{display:block;height:100%;background:linear-gradient(90deg,var(--blue-l),var(--blue))}
+.row{display:flex;gap:10px;align-items:center}
+.row.between{justify-content:space-between}
+.gap{flex:1}.mt{margin-top:12px}.mb{margin-bottom:12px}
+.txt-c{text-align:center}.txt-sm{font-size:12px}.txt-xs{font-size:10.5px}
+.cl-r{color:var(--red)}.cl-g{color:var(--green)}.cl-o{color:var(--orange)}.cl-b{color:var(--blue)}.cl-m{color:var(--label2)}.cl-gr{color:var(--gray)}
+.bld{font-weight:700}.mon{font-family:ui-monospace,monospace}
+.fab{position:absolute;right:16px;bottom:calc(92px + var(--sab));width:58px;height:58px;border-radius:50%;z-index:28;background:linear-gradient(150deg,#5fc9f5,#0a84ff);display:grid;place-items:center}
+.fab svg{width:26px;height:26px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round}
+.island{position:fixed;top:calc(10px + var(--sat));left:50%;transform:translateX(-50%);width:122px;height:34px;background:#0a0a0a;border-radius:20px;z-index:9000;transition:width .4s;display:flex;align-items:center;justify-content:center;gap:7px;overflow:hidden;padding:0 12px;color:#fff;font-size:11px;font-weight:600}
+.island.ping{width:300px}
+.island .ii{font-size:18px;flex:none}.island .it{flex:1;text-align:left;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.island.b{background:linear-gradient(90deg,#0055d4,#0a84ff)}
+.island.g{background:linear-gradient(90deg,#1a8f52,#28b36b)}
+.island.o{background:linear-gradient(90deg,#c46a00,#ff9f0a)}
+.err-screen{padding:40px 24px;font-family:ui-monospace,monospace;font-size:13px;line-height:1.6;overflow-y:auto;height:100%}
+.err-screen h2{color:var(--red);margin-bottom:16px;font-size:18px}
+.err-screen pre{background:var(--card);padding:14px;border-radius:12px;white-space:pre-wrap;word-break:break-word;margin-bottom:16px}
+.err-screen button{padding:14px;background:var(--blue);color:#fff;border:0;border-radius:12px;font-size:15px;font-weight:600;width:100%}
+@media(max-width:370px){.stat-row{grid-template-columns:1fr}.feat-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="island" class="island hidden"></div>
+<script>
+(function(){
+'use strict';
+// ===== ДИАГНОСТИКА: вместо чёрного экрана показываем ошибку =====
+function showError(msg,stack){
+  var app=document.getElementById('app');
+  if(!app)return;
+  app.innerHTML='<div class="err-screen"><h2>⚠️ Произошла ошибка</h2><pre>'+msg+'</pre><button onclick="localStorage.clear();location.reload()">Сбросить данные и перезапустить</button></div>';
+}
+window.onerror=function(msg,src,line,col,err){
+  showError(msg+'\nстрока: '+line, err&&err.stack);
+  return false;
+};
+try{
+// ===== УТИЛИТЫ =====
+function $(s,r){return (r||document).querySelector(s)}
+function $$(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s))}
+function uid(){return Math.random().toString(36).slice(2,10)}
+function fmtTime(d){return d instanceof Date?d.toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'}):d}
+function fmtDT(d){return d instanceof Date?d.toLocaleString('ru-RU',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}):d}
+function fmtDate(d){return d instanceof Date?d.toLocaleDateString('ru-RU',{day:'2-digit',month:'2-digit',year:'2-digit'}):d}
+function clamp(v,a,b){return Math.max(a,Math.min(b,v))}
+function vib(p){try{if(navigator.vibrate)navigator.vibrate(p)}catch(e){}}
+function now(){return new Date()}
+function ago(ms){return new Date(Date.now()-ms)}
+function fmtDur(s){return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')}
+function h(tag,props){
+  var el=document.createElement(tag);
+  var children=[];
+  for(var i=2;i<arguments.length;i++)children.push(arguments[i]);
+  props=props||{};
+  for(var k in props){
+    var v=props[k];
+    if(v===null||v===undefined||v===false)continue;
+    if(k==='class')el.className=v;
+    else if(k==='html')el.innerHTML=v;
+    else if(k==='style'&&typeof v==='object'){for(var sk in v)el.style[sk]=v[sk]}
+    else if(k.indexOf('on')===0&&typeof v==='function')el.addEventListener(k.slice(2).toLowerCase(),v);
+    else if(v===true)el.setAttribute(k,'');
+    else el.setAttribute(k,String(v));
+  }
+  function add(c){
+    if(c===null||c===undefined||c===false)return;
+    if(Array.isArray(c)){c.forEach(add);return}
+    el.appendChild(typeof c==='string'||typeof c==='number'?document.createTextNode(String(c)):c);
+  }
+  children.forEach(add);
+  return el;
+}
+function initials(name){
+  if(!name)return'?';
+  var p=name.trim().split(/\s+/);
+  return (p[0][0]+(p[1]?p[1][0]:'')).toUpperCase();
+}
+var ROLE_PERMS={
+  director:{name:'Директор',access:['*']},deputy:{name:'Зам. директора',access:['home','chat','tasks','staff','prod','profile','analytics','director']},
+  chiefeng:{name:'Главный инженер',access:['home','chat','tasks','staff','prod','profile','analytics']},
+  engineer:{name:'Инженер',access:['home','chat','tasks','staff','prod','profile']},
+  master:{name:'Мастер',access:['home','chat','tasks','staff','prod','profile']},
+  otk:{name:'ОТК',access:['home','chat','tasks','prod','profile','defects']},
+  safety:{name:'Охрана труда',access:['home','chat','tasks','staff','prod','profile']},
+  dispatcher:{name:'Диспетчер',access:['home','chat','tasks','staff','prod','profile','vcs']},
+  supply:{name:'Снабжение',access:['home','chat','tasks','staff','profile','suppliers']},
+  hr:{name:'Отдел кадров',access:['home','chat','tasks','staff','profile']},
+  operator:{name:'Оператор',access:['home','chat','tasks','prod','profile']},
+  supplier:{name:'Поставщик',access:['supplier']}
+};
+function isDirector(){var u=state.demoMode||state.user;return u&&u.role==='director'}
+var DATA={
+  employees:[
+    {id:'e1',name:'Соколов Иван Петрович',badge:'100123',role:'director',dept:'Дирекция',pos:'Генеральный директор',phone:'+79001110001',ext:'1001',email:'sokolov@kmz.ru',avatar:'b2',present:'on',password:'director',med:ago(200*24*3600000),points:320,blocked:false},
+    {id:'e2',name:'Воронцов Алексей Михайлович',badge:'100124',role:'deputy',dept:'Дирекция',pos:'Зам. директора по производству',phone:'+79001110002',ext:'1002',email:'vorontsov@kmz.ru',avatar:'b6',present:'on',med:ago(100*24*3600000),points:280,blocked:false},
+    {id:'e3',name:'Крылова Ольга Сергеевна',badge:'100125',role:'chiefeng',dept:'Тех. отдел',pos:'Главный инженер',phone:'+79001110003',ext:'1003',email:'krylova@kmz.ru',avatar:'b1',present:'on',med:ago(320*24*3600000),points:255,blocked:false},
+    {id:'e4',name:'Беляев Дмитрий Андреевич',badge:'100126',role:'engineer',dept:'Цех №3',pos:'Инженер-конструктор',phone:'+79001110004',ext:'1044',email:'belyaev@kmz.ru',avatar:'b5',present:'on',med:ago(50*24*3600000),points:190,blocked:false},
+    {id:'e5',name:'Михайлов Сергей Владимирович',badge:'100127',role:'master',dept:'Цех №3',pos:'Мастер участка сборки',phone:'+79001110005',ext:'1055',email:'mikhailov@kmz.ru',avatar:'b4',present:'on',med:ago(370*24*3600000),points:240,blocked:false},
+    {id:'e6',name:'Николаева Елена Игоревна',badge:'100128',role:'otk',dept:'ОТК',pos:'Контролёр ОТК',phone:'+79001110006',ext:'1066',email:'nikolaeva@kmz.ru',avatar:'b1',present:'on',med:ago(150*24*3600000),points:175,blocked:false},
+    {id:'e7',name:'Тарасов Виктор Павлович',badge:'100129',role:'safety',dept:'ОТ и ПБ',pos:'Инженер по охране труда',phone:'+79001110007',ext:'1077',email:'tarasov@kmz.ru',avatar:'b3',present:'away',med:ago(80*24*3600000),points:160,blocked:false},
+    {id:'e8',name:'Фёдоров Артём Николаевич',badge:'100130',role:'dispatcher',dept:'Диспетчерская',pos:'Старший диспетчер',phone:'+79001110008',ext:'1088',email:'fedorov@kmz.ru',avatar:'b2',present:'on',med:ago(250*24*3600000),points:210,blocked:false},
+    {id:'e9',name:'Григорьева Наталья Олеговна',badge:'100131',role:'supply',dept:'Снабжение',pos:'Менеджер по закупкам',phone:'+79001110009',ext:'1099',email:'grigoreva@kmz.ru',avatar:'b6',present:'on',med:ago(30*24*3600000),points:145,blocked:false},
+    {id:'e10',name:'Орлова Светлана Викторовна',badge:'100132',role:'hr',dept:'Отдел кадров',pos:'Специалист по кадрам',phone:'+79001110010',ext:'1100',email:'orlova@kmz.ru',avatar:'b4',present:'on',med:ago(180*24*3600000),points:130,blocked:false},
+    {id:'e11',name:'Кузнецов Павел Андреевич',badge:'100133',role:'operator',dept:'Цех №3',pos:'Оператор станков ЧПУ',phone:'+79001110011',ext:'1111',email:'kuznetsov@kmz.ru',avatar:'b3',present:'on',med:ago(400*24*3600000),points:120,blocked:false},
+    {id:'e12',name:'Жуков Максим Олегович',badge:'100134',role:'operator',dept:'Цех №5',pos:'Оператор линии',phone:'+79001110012',ext:'1112',email:'zhukov@kmz.ru',avatar:'b5',present:'off',med:ago(120*24*3600000),points:95,blocked:false}
+  ],
+  suppliers:[
+    {id:'s1',name:'ООО "МеталлТрейд"',code:'MT-14',pass:'2026',rating:4.7,onTime:92},
+    {id:'s2',name:'АО "СтальПром"',code:'SP-22',pass:'2026',rating:4.3,onTime:87},
+    {id:'s3',name:'ПАО "УралМеталлург"',code:'UM-33',pass:'2026',rating:4.9,onTime:96}
+  ],
+  products:[
+    {id:'p1',name:'Д49',type:'Дизель',power:'2200 кВт',desc:'Четырёхтактный V-образный 16-цилиндровый дизельный двигатель для магистральных тепловозов.',serial:'Д49-2026-0147',ops:[{t:'Мойка блока',d:ago(30*24*3600000),by:'Кузнецов П.А.',ok:true},{t:'Контроль постелей',d:ago(28*24*3600000),by:'Николаева Е.И.',ok:true},{t:'Монтаж коленвала',d:ago(25*24*3600000),by:'Михайлов С.В.',ok:true},{t:'Монтаж ШПГ',d:ago(20*24*3600000),by:'Михайлов С.В.',ok:true},{t:'Обкатка',d:ago(10*24*3600000),by:'Беляев Д.А.',ok:false}]},
+    {id:'p2',name:'ТЭМ18ДМ',type:'Тепловоз',power:'1200 кВт',desc:'Маневровый тепловоз с дизель-электрической передачей.',serial:'ТЭМ18ДМ-2026-0032',ops:[{t:'Сборка рамы',d:ago(40*24*3600000),by:'Михайлов С.В.',ok:true},{t:'Установка дизеля',d:ago(35*24*3600000),by:'Кузнецов П.А.',ok:true}]},
+    {id:'p3',name:'2ТЭ25КМ',type:'Тепловоз',power:'6400 кВт',desc:'Грузовой магистральный двухсекционный тепловоз с коллекторным тяговым приводом.',serial:'2ТЭ25КМ-2026-0014',ops:[{t:'Сборка секции А',d:ago(50*24*3600000),by:'Михайлов С.В.',ok:true},{t:'Сцепка секций',d:ago(30*24*3600000),by:'Михайлов С.В.',ok:true}]}
+  ],
+  knowledgeBase:[
+    {id:'kb1',product:'Д49',title:'Регламент ТО-2 двигателя Д49',text:'ТО-2 проводится каждые 500 моточасов. Включает: замену масла (М-14В2, 380 л), проверку форсунок, диагностику турбокомпрессора.',src:'РЭ Д49, раздел 5.2'},
+    {id:'kb2',product:'Д49',title:'Неисправность: повышенная температура выхлопа',text:'Причины: 1) Загрязнение воздушного фильтра. 2) Утечка наддувочного воздуха. 3) Неисправность форсунок.',src:'Инструкция по диагностике Д49, п. 3.4'},
+    {id:'kb3',product:'*',title:'Инструкция по ОТ при работе на токарном станке',text:'Обязательно: СИЗ (очки, наушники, спецодежда). Запрещено: работать без защитного экрана.',src:'ИОТ-123-2024'}
+  ],
+  chats:[
+    {id:'c1',userId:'e5',last:'Михайлов С.В.',msg:'Отправил фото дефекта по КЗ-1042',time:ago(5*60000),unread:2,type:'dm'},
+    {id:'c2',userId:'e8',last:'Фёдоров А.Н.',msg:'Смена принята, все линии в работе',time:ago(25*60000),unread:0,type:'dm'},
+    {id:'c3',userId:null,last:'Диспетчерская цеха №3',msg:'Срочно: линия сборки #2',time:ago(2*3600000),unread:5,type:'group',members:['e8','e5','e11']}
+  ],
+  tasks:[
+    {id:'KZ-1042',title:'Устранить дефект литья блока цилиндров',desc:'Обнаружена раковина 15×8 мм на постели №3.',executor:'e4',stage:'work',priority:'high',due:ago(-2*3600000),checklist:[{t:'Осмотреть раковину',d:true},{t:'Согласовать ремонт',d:false},{t:'Контроль ОТК',d:false}]},
+    {id:'KZ-1041',title:'Провести внеплановое ТО-2 двигателя Д49',desc:'Наработка превысила 500 моточасов.',executor:'e5',stage:'new',priority:'med',due:ago(-26*3600000),checklist:[]},
+    {id:'KZ-1040',title:'Подготовить отчёт по OEE за июль',desc:'Собрать данные по всем линиям цеха №3.',executor:'e4',stage:'review',priority:'med',due:ago(-48*3600000),checklist:[]},
+    {id:'KZ-1039',title:'Согласовать закупку металлопроката 40Х',desc:'Поставщик МеталлТрейд предлагает партию 45 т.',executor:'e1',stage:'work',priority:'high',due:ago(-72*3600000),checklist:[]}
+  ],
+  news:[
+    {id:'n1',emoji:'🚂',cat:'Производство',title:'Коломенский завод передал РЖД новый 2ТЭ25КМ',text:'Магистральный грузовой тепловоз прошёл приёмку и отправлен в эксплуатацию.',date:ago(1*24*3600000),views:1240},
+    {id:'n2',emoji:'🏆',cat:'Люди',title:'Бригада цеха №3 — победитель конкурса',text:'Команда участка сборки заняла первое место среди предприятий холдинга.',date:ago(2*24*3600000),views:890},
+    {id:'n3',emoji:'🔧',cat:'Модернизация',title:'Завершена модернизация линии лазерной резки Л-1',text:'Установлен новый источник 6 кВт. Производительность выросла на 23%.',date:ago(4*24*3600000),views:670}
+  ],
+  downtime:[
+    {id:'d1',line:'Л-2',cause:'Поломка сварочного поста №2',dur:95,cost:142000,type:'Поломка'},
+    {id:'d2',line:'П-400',cause:'Плановое ТО',dur:240,cost:0,type:'ТО'},
+    {id:'d3',line:'Л-5',cause:'Нет заготовки со склада',dur:40,cost:61000,type:'Снабжение'}
+  ],
+  warehouse:[
+    {id:'w1',name:'Форсунка Д49',ico:'🔩',stock:4,min:10,unit:'шт'},
+    {id:'w2',name:'Фильтр масляный',ico:'🧰',stock:25,min:15,unit:'шт'},
+    {id:'w3',name:'Масло М-14В2',ico:'🛢',stock:120,min:200,unit:'л'},
+    {id:'w4',name:'Прокладки ГБЦ',ico:'🔧',stock:2,min:8,unit:'шт'}
+  ],
+  permits:[
+    {id:'НД-201',type:'Огневые работы',place:'Цех №3, пост сварки',who:'Михайлов С.В.',status:'active'},
+    {id:'НД-202',type:'Работа на высоте',place:'Крыша цеха №5',who:'Кузнецов П.А.',status:'pending'}
+  ],
+  ideas:[
+    {id:'i1',title:'Установить магнитные держатели инструмента у ЧПУ-07',author:'Кузнецов П.А.',votes:14,my:false},
+    {id:'i2',title:'Электронный журнал передачи смены вместо бумажного',author:'Фёдоров А.Н.',votes:21,my:false},
+    {id:'i3',title:'Добавить освещение над постом сварки №3',author:'Михайлов С.В.',votes:9,my:false}
+  ],
+  predictions:[]
+};
+var DEFAULT_STATE={
+  user:null,splash:true,onboarding:false,theme:'auto',tab:'home',page:null,
+  aiAutonomy:true,aiVoiceReply:false,aiChains:[],
+  aiMem:{xp:0,queries:0,name:null,facts:[]},
+  aiInsights:[],chatsData:JSON.parse(JSON.stringify(DATA.chats)),tasksData:JSON.parse(JSON.stringify(DATA.tasks)),
+  registeredUsers:[],calls:[],meetings:[],favorites:{employees:[],tasks:[]},
+  notifs:[],notifPrefs:{urgent:true,tasks:true,chats:true,ai:true},
+  calMonth:null,calSel:null,pinEnabled:false,pin:null,locked:false,shiftHandovers:[],
+  telemetry:{
+    'Л-1':{name:'Линия лазерной резки',status:'ok',temp:42,load:86,history:[84,82,85,86,84,87,86,85,87,86,85,86]},
+    'Л-2':{name:'Сварочный участок',status:'warn',temp:78,load:74,history:[72,74,76,78,79,80,78,79,78,77,76,78]},
+    'Л-3':{name:'Покрасочная камера',status:'ok',temp:35,load:63,history:[60,62,63,64,62,63,65,63,62,63,64,63]},
+    'Л-5':{name:'Сборочный конвейер',status:'ok',temp:39,load:91,history:[88,89,90,91,92,91,90,91,92,91,90,91]},
+    'ЧПУ-07':{name:'Фрезерный центр',status:'ok',temp:51,load:68,history:[65,66,67,68,69,68,67,68,69,68,67,68]}
+  },
+  kpi:{oee:81.4,defect:1.2,planDone:1247,planTarget:1500,revenue:847.2},
+  demoMode:null
+};
+var state=loadState();
+var autonomyTimer=null;
+function loadState(){
+  try{
+    var saved=localStorage.getItem('km-state-v81');
+    if(saved){
+      var p=JSON.parse(saved);
+      var merged={};
+      for(var k in DEFAULT_STATE)merged[k]=DEFAULT_STATE[k];
+      for(var k2 in p)merged[k2]=p[k2];
+      merged.aiMem={xp:0,queries:0,name:null,facts:[],...(p.aiMem||{})};
+      merged.favorites={employees:[],tasks:[],...(p.favorites||{})};
+      return merged;
+    }
+  }catch(e){}
+  return JSON.parse(JSON.stringify(DEFAULT_STATE));
+}
+function saveState(){try{localStorage.setItem('km-state-v81',JSON.stringify(state))}catch(e){}}
+function applyTheme(){
+  if(state.theme==='auto')document.documentElement.removeAttribute('data-theme');
+  else document.documentElement.setAttribute('data-theme',state.theme);
+}
+var islandTimer=null;
+function showIsland(text,icon,type,ms){
+  var i=$('#island');
+  if(!i)return;
+  i.innerHTML='';
+  i.className='island ping '+(type||'');
+  i.appendChild(h('span',{class:'ii'},icon||'⚙️'));
+  i.appendChild(h('span',{class:'it'},text));
+  vib(15);
+  clearTimeout(islandTimer);
+  islandTimer=setTimeout(function(){
+    i.className='island';
+    setTimeout(function(){i.className='island hidden';i.innerHTML=''},400);
+  },ms||3500);
+}
+// ===== АВТОБЛОКИРОВКА =====
+var hiddenAt=0;
+document.addEventListener('visibilitychange',function(){
+  if(document.hidden){hiddenAt=Date.now()}
+  else{
+    if(state.pinEnabled&&state.user&&hiddenAt&&Date.now()-hiddenAt>30000){state.locked=true;saveState();render()}
+    hiddenAt=0;
+  }
+});
+// ===== SPLASH =====
+function renderSplash(){
+  var app=$('#app');app.innerHTML='';
+  app.appendChild(h('div',{class:'splash'},
+    h('div',{class:'logo'},'⚙️'),
+    h('h1',{class:'disp'},'КМ·ИНЖЕНЕР'),
+    h('p',{},'Корпоративное приложение АО «Коломенский завод»'),
+    h('div',{class:'bar'},h('i',{id:'splashBar'})),
+    h('div',{class:'status',id:'splashStatus'},'Инициализация...')
+  ));
+  var statuses=['Инициализация...','Загрузка базы знаний...','Проверка кэша...','Настройка ИИ...','Готово'];
+  var prog=0;
+  var iv=setInterval(function(){
+    prog+=20+Math.random()*10;
+    if(prog>100)prog=100;
+    var bar=$('#splashBar');if(bar)bar.style.width=prog+'%';
+    var stat=$('#splashStatus');if(stat)stat.textContent=statuses[Math.min(statuses.length-1,Math.floor(prog/25))];
+    if(prog>=100){clearInterval(iv);setTimeout(function(){state.splash=false;saveState();render()},400)}
+  },250);
+}
+// ===== ONBOARDING =====
+var obSlide=0;
+function renderOnboarding(){
+  var app=$('#app');app.innerHTML='';
+  var slides=[
+    {icon:'⚙️',cls:'b',t:'Добро пожаловать',p:'КМ·Инженер — единая цифровая среда для сотрудников Коломенского завода.'},
+    {icon:'🤖',cls:'b',t:'ИИ-ассистент',p:'Предиктивная аналитика, голосовое управление, автономные цепочки задач.'},
+    {icon:'🔒',cls:'g',t:'Безопасность',p:'PIN и Face ID, электронные подписи, журнал аудита. Данные защищены ФЗ-152.'}
+  ];
+  var ob=h('div',{class:'onboard'});
+  slides.forEach(function(s,i){
+    ob.appendChild(h('div',{class:'ob-slide'+(i===obSlide?' on':'')},
+      h('div',{class:'ob-ico '+s.cls},s.icon),
+      h('h2',{class:'disp'},s.t),
+      h('p',{},s.p),
+      h('div',{class:'ob-dots'},slides.map(function(_,j){return h('i',{class:j===obSlide?'on':''})})),
+      h('button',{class:'btn b full press',onclick:function(){
+        if(i===slides.length-1){state.onboarding=true;saveState();render()}
+        else{obSlide=i+1;renderOnboarding()}
+      }},i===slides.length-1?'Начать работу':'Далее')
+    ));
+  });
+  ob.appendChild(h('div',{class:'auth-link'},h('a',{onclick:function(){state.onboarding=true;saveState();render()}},'Пропустить')));
+  app.appendChild(ob);
+}
+// ===== AUTH =====
+var authMode='login',authType='emp',authErr='';
+function fld(label,id,ph,type){
+  return h('div',{class:'fld'},h('label',{},label),h('input',{id:id,type:type||'text',placeholder:ph||'',autocomplete:'off'}));
+}
+function renderAuth(){
+  var app=$('#app');app.innerHTML='';
+  var auth=h('div',{class:'auth'});
+  if(authMode==='login'){
+    auth.appendChild(h('h2',{class:'disp'},'Вход'));
+    auth.appendChild(h('div',{class:'sub'},'АО «Коломенский завод»'));
+    if(authErr)auth.appendChild(h('div',{class:'err'},authErr));
+    auth.appendChild(h('div',{class:'toggle-mode'},
+      h('button',{class:authType==='emp'?'on':'',onclick:function(){authType='emp';renderAuth()}},'Сотрудник'),
+      h('button',{class:authType==='sup'?'on':'',onclick:function(){authType='sup';renderAuth()}},'Поставщик')
+    ));
+    if(authType==='emp'){
+      auth.appendChild(fld('Табельный номер','bnum','100123'));
+      auth.appendChild(fld('Пароль','bpass','демо: director','password'));
+      auth.appendChild(h('button',{class:'btn b full press mt',onclick:doLogin},'Войти'));
+    }else{
+      auth.appendChild(fld('Код поставщика','sc','MT-14'));
+      auth.appendChild(fld('Пароль','sp','2026','password'));
+      auth.appendChild(h('button',{class:'btn b full press mt',onclick:doSupplierLogin},'Войти как поставщик'));
+    }
+    auth.appendChild(h('div',{class:'auth-link'},'Нет аккаунта? ',h('a',{onclick:function(){authMode='register';authErr='';renderAuth()}},'Зарегистрироваться')));
+    auth.appendChild(h('div',{class:'auth-link'},h('a',{onclick:function(){state.user=DATA.employees[0];state.demoMode=null;saveState();render();showIsland('Демо-режим: Директор','👤','b')}},'🎭 Демо-режим (войти как директор)')));
+  }else{
+    auth.appendChild(h('h2',{class:'disp'},'Регистрация'));
+    auth.appendChild(h('div',{class:'sub'},'Создание учётной записи'));
+    if(authErr)auth.appendChild(h('div',{class:'err'},authErr));
+    auth.appendChild(fld('ФИО полностью','rname','Иванов Иван Иванович'));
+    auth.appendChild(fld('Табельный номер','rbadge','100999'));
+    var sel=h('div',{class:'fld'},h('label',{},'Роль'));
+    var s=h('select',{id:'rrole'});
+    for(var rk in ROLE_PERMS){if(rk==='supplier')continue;s.appendChild(h('option',{value:rk},ROLE_PERMS[rk].name))}
+    sel.appendChild(s);
+    auth.appendChild(sel);
+    auth.appendChild(fld('Подразделение','rdept','Цех №3'));
+    auth.appendChild(fld('Должность','rpos','Инженер'));
+    auth.appendChild(fld('Мобильный телефон','rphone','+79009999999','tel'));
+    auth.appendChild(fld('Пароль','rpass','минимум 4 символа','password'));
+    auth.appendChild(h('label',{class:'check'},h('input',{type:'checkbox',id:'rfz'}),h('span',{},'Согласие на обработку персональных данных (ФЗ-152)')));
+    auth.appendChild(h('button',{class:'btn b full press mt',onclick:doRegister},'Зарегистрироваться'));
+    auth.appendChild(h('div',{class:'auth-link'},'Уже есть аккаунт? ',h('a',{onclick:function(){authMode='login';authErr='';renderAuth()}},'Войти')));
+  }
+  app.appendChild(auth);
+}
+function doLogin(){
+  var b=$('#bnum').value.trim(),p=$('#bpass').value;
+  if(!b){authErr='Введите табельный номер';renderAuth();return}
+  var emp=DATA.employees.find(function(e){return e.badge===b})||state.registeredUsers.find(function(e){return e.badge===b});
+  if(!emp){authErr='Сотрудник не найден. Демо: 100123-100134';renderAuth();return}
+  if(emp.blocked){authErr='Аккаунт заблокирован';renderAuth();return}
+  if(emp.password&&p!==emp.password&&p!==''){authErr='Неверный пароль';renderAuth();return}
+  state.user=emp;state.demoMode=null;authErr='';saveState();
+  showIsland('Добро пожаловать, '+emp.name.split(' ')[1],'👋','b');
+  render();
+}
+function doSupplierLogin(){
+  var c=$('#sc').value.trim(),p=$('#sp').value;
+  var sup=DATA.suppliers.find(function(s){return s.code===c&&s.pass===p});
+  if(!sup){authErr='Неверный код/пароль. Демо: MT-14 / 2026';renderAuth();return}
+  var u={};for(var k in sup)u[k]=sup[k];
+  u.role='supplier';u.badge=sup.code;u.name=sup.name;u.pos='Поставщик';u.dept='Контрагенты';
+  state.user=u;state.demoMode=null;authErr='';saveState();
+  showIsland('Вход поставщика: '+sup.name,'🏭','b');
+  render();
+}
+function doRegister(){
+  var name=$('#rname').value.trim(),badge=$('#rbadge').value.trim(),role=$('#rrole').value;
+  var dept=$('#rdept').value.trim(),pos=$('#rpos').value.trim(),phone=$('#rphone').value.trim();
+  var pass=$('#rpass').value,fz=$('#rfz').checked;
+  if(!name){authErr='Введите ФИО';renderAuth();return}
+  if(!badge){authErr='Введите табельный номер';renderAuth();return}
+  if(DATA.employees.find(function(e){return e.badge===badge})){authErr='Табельный уже используется';renderAuth();return}
+  if(!pass||pass.length<4){authErr='Пароль минимум 4 символа';renderAuth();return}
+  if(!fz){authErr='Необходимо согласие по ФЗ-152';renderAuth();return}
+  var newUser={id:'u'+uid(),name:name,badge:badge,role:role,dept:dept||'Цех №3',pos:pos||'Инженер',phone:phone,ext:'—',email:badge+'@kmz.ru',avatar:'b1',present:'on',password:pass,med:now(),points:0,blocked:false};
+  state.registeredUsers.push(newUser);
+  DATA.employees.push(newUser);
+  state.user=newUser;state.demoMode=null;authErr='';saveState();
+  showIsland('Регистрация завершена','✅','g');
+  vib([30,30,30]);
+  render();
+}
+// ===== RENDER =====
+function render(){
+  applyTheme();
+  if(state.splash){renderSplash();return}
+  if(!state.onboarding){renderOnboarding();return}
+  if(!state.user){renderAuth();return}
+  if(state.locked&&state.pinEnabled){renderLock();return}
+  if(state.user.role==='supplier'){renderSupplierApp();return}
+  renderMainApp();
+}
+function renderLock(){
+  var app=$('#app');app.innerHTML='';
+  var lock=h('div',{class:'lock'});
+  lock.appendChild(h('div',{class:'lk-ico'},'🔐'));
+  lock.appendChild(h('h2',{},'КМ·Инженер'));
+  lock.appendChild(h('div',{class:'sub'},'Введите PIN-код'));
+  var dots=h('div',{class:'pin-dots',id:'pinDots'},[0,1,2,3].map(function(){return h('i')}));
+  lock.appendChild(dots);
+  var entry='';
+  function update(){$$('#pinDots i').forEach(function(d,i){d.classList.toggle('on',i<entry.length)})}
+  function press(d){
+    if(entry.length>=4)return;
+    entry+=d;vib(10);update();
+    if(entry.length===4){
+      setTimeout(function(){
+        if(entry===state.pin){state.locked=false;saveState();showIsland('Разблокировано','🔓','g');render()}
+        else{
+          vib([80,60,80]);
+          var pd=$('#pinDots');if(pd)pd.classList.add('err');
+          showIsland('Неверный PIN','❌','o');
+          setTimeout(function(){entry='';update();var pd2=$('#pinDots');if(pd2)pd2.classList.remove('err')},450);
+        }
+      },200);
+    }
+  }
+  var pad=h('div',{class:'pin-pad'});
+  ['1','2','3','4','5','6','7','8','9'].forEach(function(d){pad.appendChild(h('button',{class:'press',onclick:function(){press(d)}},d))});
+  pad.appendChild(h('button',{class:'fn press',onclick:tryFaceID},'🧑 Face ID'));
+  pad.appendChild(h('button',{class:'press',onclick:function(){press('0')}},'0'));
+  pad.appendChild(h('button',{class:'fn press',onclick:function(){entry=entry.slice(0,-1);update()}},'⌫'));
+  lock.appendChild(pad);
+  app.appendChild(lock);
+}
+function tryFaceID(){
+  showIsland('Face ID: подтверждение…','🧑','b',2000);
+  vib(20);
+  setTimeout(function(){state.locked=false;saveState();showIsland('Личность подтверждена','✅','g');render()},1400);
+}
+function renderMainApp(){
+  var app=$('#app');app.innerHTML='';
+  var main=h('div',{class:'main'});
+  var view=h('div',{class:'view on'});
+  if(state.tab==='home')renderHome(view);
+  else if(state.tab==='chat')renderChats(view);
+  else if(state.tab==='tasks')renderTasks(view);
+  else if(state.tab==='staff')renderStaffTab(view);
+  else if(state.tab==='prod')renderProd(view);
+  else if(state.tab==='profile')renderProfile(view);
+  main.appendChild(view);
+  if(state.tab==='tasks')main.appendChild(h('button',{class:'fab press',onclick:openNewTask},h('svg',{viewBox:'0 0 24 24'},h('path',{d:'M12 5v14M5 12h14'}))));
+  main.appendChild(renderTabBar());
+  app.appendChild(main);
+  renderPageOverlay(app);
+}
+function renderTabBar(){
+  var tabs=[
+    {id:'home',label:'Главная',icon:'M3 10.5L12 3l9 7.5M5 9.5V21h5v-6h4v6h5V9.5'},
+    {id:'chat',label:'Чаты',icon:'M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z',badge:countUnread()},
+    {id:'tasks',label:'Задачи',icon:'M9 11l3 3L22 4M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11'},
+    {id:'staff',label:'Штат',icon:'M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z'},
+    {id:'prod',label:'Цех',icon:'M2 20a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8l-7 5V8l-7 5V4a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2z'},
+    {id:'profile',label:'Кабинет',icon:'M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z'}
+  ];
+  var tb=h('div',{class:'tabbar'});
+  tabs.forEach(function(t){
+    var btn=h('button',{class:'tbtn press'+(state.tab===t.id?' on':''),onclick:function(){state.tab=t.id;state.page=null;saveState();render()}},
+      h('svg',{viewBox:'0 0 24 24'},h('path',{d:t.icon})),h('span',{},t.label));
+    if(t.badge&&t.badge>0)btn.appendChild(h('span',{class:'tb'},String(t.badge)));
+    tb.appendChild(btn);
+  });
+  return tb;
+}
+function countUnread(){return state.chatsData.reduce(function(s,c){return s+(c.unread||0)},0)}
+function aiLevel(){
+  var xp=state.aiMem.xp;
+  if(xp>=200)return{n:5,t:'Главный ИИ',next:null};
+  if(xp>=100)return{n:4,t:'Ведущий ИИ',next:200};
+  if(xp>=50)return{n:3,t:'Опытный ИИ',next:100};
+  if(xp>=20)return{n:2,t:'ИИ-специалист',next:50};
+  return{n:1,t:'ИИ-стажёр',next:20};
+}
+function aiLearn(){state.aiMem.xp+=1;state.aiMem.queries+=1;saveState()}
+// ===== HOME =====
+function renderHome(view){
+  var u=state.demoMode||state.user;
+  var lvl=aiLevel();
+  view.appendChild(h('div',{class:'large-title'},'КМ·Инженер'));
+  view.appendChild(h('div',{class:'hdr'},
+    h('div',{class:'txt-sm cl-m',style:{flex:'1'}},now().toLocaleDateString('ru-RU',{weekday:'long',day:'numeric',month:'long'})),
+    h('button',{class:'hdr-btn press',onclick:openGlobalSearch},h('svg',{viewBox:'0 0 24 24'},h('circle',{cx:'11',cy:'11',r:'8'}),h('path',{d:'M21 21l-4.35-4.35'}))),
+    h('button',{class:'hdr-btn press',onclick:openAllFeatures},h('svg',{viewBox:'0 0 24 24'},h('path',{d:'M3 3h7v7H3zM14 3h7v7h-7zM14 14h7v7h-7zM3 14h7v7H3z'}))),
+    h('button',{class:'hdr-btn press',onclick:openNotifCenter},h('svg',{viewBox:'0 0 24 24'},h('path',{d:'M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9'})))
+  ));
+  view.appendChild(h('div',{class:'hero press',onclick:openAIChat},
+    h('div',{class:'live'},h('i'),'ИИ-ДАЙДЖЕСТ · '+lvl.t),
+    h('h3',{},'Добрый день, '+(state.aiMem.name||u.name.split(' ')[1])+'!'),
+    h('p',{},getAIDigest())
+  ));
+  if(DATA.predictions.length>0){
+    var p=DATA.predictions[0];
+    view.appendChild(h('div',{class:'predict-card'+(p.prob>70?' crit':'')+' press',onclick:openPredict},
+      h('div',{class:'pc-top'},h('span',{},'📈'),h('b',{},'ИИ-прогноз: '+p.line),h('span',{class:'tag '+(p.prob>70?'tg-r':'tg-o')},p.prob+'%')),
+      h('div',{class:'txt-sm cl-m'},p.reason),
+      h('div',{class:'prob-bar'},h('i',{style:{width:p.prob+'%',background:p.prob>70?'var(--red)':'var(--orange)'}}))
+    ));
+  }
+  view.appendChild(h('div',{class:'hscroll'},
+    statCard('OEE','81.4','%','c',92),statCard('План','1247','/1500','b',83),
+    statCard('Брак','1.2','%','g',8),statCard('Простои','7.7','ч','o',45)
+  ));
+  var myTasks=state.tasksData.filter(function(t){return t.executor===u.id&&t.stage!=='done'}).slice(0,3);
+  view.appendChild(h('div',{class:'gtitle row between'},h('span',{},'Мои задачи'),h('a',{class:'txt-sm cl-b press',onclick:function(){state.tab='tasks';saveState();render()}},'Все →')));
+  if(myTasks.length===0)view.appendChild(h('div',{class:'card'},h('div',{class:'empty'},'Нет активных задач')));
+  else myTasks.forEach(function(t){view.appendChild(renderTaskCard(t,true))});
+  view.appendChild(h('div',{class:'gtitle row between'},h('span',{},'📰 Газета завода'),h('a',{class:'txt-sm cl-b press',onclick:openNews},'Читать →')));
+  var topNews=DATA.news[0];
+  view.appendChild(h('div',{class:'news-card press',onclick:openNews},
+    h('div',{class:'news-img',style:{background:'linear-gradient(135deg,rgba(10,132,255,.15),rgba(95,201,245,.1))'}},topNews.emoji),
+    h('div',{class:'news-body'},h('span',{class:'tag tg-b'},topNews.cat),h('b',{},topNews.title),h('div',{class:'news-meta'},h('span',{},fmtDT(topNews.date)),h('span',{},'👁 '+topNews.views)))
+  ));
+  view.appendChild(h('div',{class:'gtitle'},'⚡ Быстрые действия'));
+  var qa=h('div',{style:{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'10px',marginBottom:'14px'}});
+  qa.appendChild(qaBtn('💬','Новый чат',openNewChat));
+  qa.appendChild(qaBtn('🗂','Все функции',openAllFeatures));
+  qa.appendChild(qaBtn('📈','Прогнозы ИИ',openPredict));
+  qa.appendChild(qaBtn('📅','Календарь',openCalendar));
+  view.appendChild(qa);
+}
+function getAIDigest(){
+  var u=state.demoMode||state.user;
+  var myOpen=state.tasksData.filter(function(t){return t.executor===u.id&&t.stage!=='done'}).length;
+  var unread=countUnread();
+  var parts=[];
+  if(myOpen>0)parts.push(myOpen+' активных задач');
+  if(unread>0)parts.push(unread+' непрочитанных');
+  if(DATA.predictions.length>0)parts.push(DATA.predictions.length+' прогноза ИИ');
+  if(isDirector())parts.push('финансовый отчёт готов');
+  if(parts.length===0)return'Всё в штатном режиме. Цех работает стабильно.';
+  return'У вас '+parts.join(', ')+'. Нажми для подробностей.';
+}
+function statCard(label,num,unit,cls,pct){return h('div',{class:'hcard'},h('small',{},label),h('div',{class:'num'},num,h('em',{},unit)),h('div',{class:'pbar'},h('i',{class:cls,style:{width:clamp(pct,0,100)+'%'}})))}
+function qaBtn(icon,label,onclick){return h('button',{class:'card press',onclick:onclick,style:{padding:'14px',textAlign:'center'}},h('div',{style:{fontSize:'24px',marginBottom:'6px'}},icon),h('div',{class:'txt-sm bld'},label))}
+// ===== ПРЕДИКТИВНЫЙ ИИ =====
+function genPredictions(){
+  var preds=[];
+  for(var k in state.telemetry){
+    var v=state.telemetry[k];
+    if(v.status==='warn'){
+      preds.push({line:k,name:v.name,prob:clamp(Math.round(v.temp),40,92),reason:'Температура '+v.temp+'°C превышает норму.'});
+    }
+  }
+  preds.sort(function(a,b){return b.prob-a.prob});
+  DATA.predictions=preds.slice(0,3);
+}
+function openPredict(){state.page='predict';saveState();render()}
+function renderPredict(container){
+  genPredictions();
+  var pg=h('div',{class:'page on'});
+  pg.appendChild(mkNav('Предиктивная аналитика'));
+  var body=h('div',{class:'pg-body'});
+  body.appendChild(h('div',{class:'hero',style:{background:'linear-gradient(140deg,#8e6cf0,#5c3fd4)'}},
+    h('div',{class:'live'},h('i'),'ИИ-МОНИТОРИНГ 24/7'),
+    h('h3',{},'Прогноз отказов'),
+    h('p',{},'Нейросеть анализирует телеметрию и предсказывает поломки до их возникновения')
+  ));
+  if(DATA.predictions.length===0){
+    body.appendChild(h('div',{class:'empty'},'Все системы в норме 👍'));
+  }else{
+    DATA.predictions.forEach(function(p){
+      body.appendChild(h('div',{class:'predict-card'+(p.prob>70?' crit':p.prob>40?'':' ok')},
+        h('div',{class:'pc-top'},h('b',{},'📈 '+p.line+' · '+p.name),h('span',{class:'tag '+(p.prob>70?'tg-r':p.prob>40?'tg-o':'tg-g')},'риск '+p.prob+'%')),
+        h('div',{class:'txt-sm cl-m'},p.reason),
+        h('div',{class:'prob-bar'},h('i',{style:{width:p.prob+'%',background:p.prob>70?'var(--red)':p.prob>40?'var(--orange)':'var(--green)'}})),
+        p.prob>40?h('button',{class:'btn b full press mt',onclick:function(){
+          var id='KZ-'+(1050+state.tasksData.length);
+          state.tasksData.unshift({id:id,title:'Предиктивное ТО: '+p.line,desc:'ИИ спрогнозировал риск отказа '+p.prob+'%. '+p.reason,executor:'e5',stage:'new',priority:p.prob>70?'high':'med',due:ago(-24*3600000),checklist:[],ai:true});
+          saveState();showIsland('Задача '+id+' создана ИИ','🤖','g');vib(30);
+        }},'🤖 Создать задачу на ТО автоматически'):null
+      ));
+    });
+  }
+  body.appendChild(h('div',{class:'txt-xs cl-gr txt-c mt'},'⛓ Модель: вибрация + температура + наработка · точность 87%'));
+  pg.appendChild(body);
+  container.appendChild(pg);
+}
+// ===== АВТОНОМНЫЕ ЦЕПОЧКИ =====
+function runAIChain(trigger){
+  var chain={id:uid(),trigger:trigger,steps:[],status:'running',time:now()};
+  state.aiChains.unshift(chain);
+  if(state.aiChains.length>10)state.aiChains.pop();
+  saveState();
+  var steps=[
+    {t:'Обнаружена аномалия',d:trigger},
+    {t:'Анализ телеметрии',d:'Сбор данных за 24 ч'},
+    {t:'Создана задача',d:'Автоназначение исполнителя'},
+    {t:'Уведомлён ответственный',d:'Push + сообщение'},
+    {t:'Контроль исполнения',d:'Мониторинг до завершения'}
+  ];
+  steps.forEach(function(s,i){
+    setTimeout(function(){
+      chain.steps.push(s);
+      if(i===steps.length-1){chain.status='done';showIsland('ИИ: цепочка завершена','⛓','g')}
+      saveState();
+      if(state.page==='chains')render();
+    },(i+1)*700);
+  });
+}
+function openChains(){state.page='chains';saveState();render()}
+function renderChains(container){
+  var pg=h('div',{class:'page on'});
+  pg.appendChild(mkNav('Автономные цепочки ИИ'));
+  var body=h('div',{class:'pg-body'});
+  body.appendChild(h('div',{class:'card',style:{padding:'14px'}},
+    h('div',{class:'row between'},h('div',{style:{flex:'1'}},h('b',{style:{fontSize:'14px'}},'⛓ Автономный режим'),h('small',{class:'cl-m'},'ИИ сам находит проблемы и действует')),h('button',{class:'tgl'+(state.aiAutonomy?' on':''),onclick:function(e){state.aiAutonomy=!state.aiAutonomy;e.target.classList.toggle('on');saveState()}})),
+    h('button',{class:'btn b full press mt',onclick:function(){runAIChain('Ручной запуск: проверка всех систем')}},'▶ Запустить цепочку сейчас')
+  ));
+  if(state.aiChains.length===0){
+    body.appendChild(h('div',{class:'empty'},'Цепочек пока нет. ИИ запустит их автоматически при обнаружении аномалий.'));
+  }else{
+    body.appendChild(h('div',{class:'gtitle'},'Журнал цепочек'));
+    state.aiChains.forEach(function(c){
+      body.appendChild(h('div',{class:'chain-card'},
+        h('div',{class:'row between mb'},h('b',{},'⛓ '+c.trigger),h('span',{class:'tag '+(c.status==='done'?'tg-g':'tg-o')},c.status==='done'?'Завершена':'Выполняется')),
+        h('div',{class:'txt-xs cl-gr mb'},fmtDT(c.time)),
+        c.steps.map(function(s){return h('div',{class:'chain-step'},h('div',{class:'cs-i'},'✓'),h('div',{class:'cs-t'},h('b',{},s.t),h('small',{},s.d)))})
+      ));
+    });
+  }
+  pg.appendChild(body);
+  container.appendChild(pg);
+}
+// ===== АДМИН =====
+function openAdmin(){state.page='admin';saveState();render()}
+function renderAdmin(container){
+  var pg=h('div',{class:'page on'});
+  pg.appendChild(mkNav('Админ-панель'));
+  var body=h('div',{class:'pg-body'});
+  body.appendChild(h('div',{class:'stat-row'},
+    h('div',{class:'stat'},h('small',{},'Всего сотрудников'),h('b',{},DATA.employees.length)),
+    h('div',{class:'stat'},h('small',{},'Заблокировано'),h('b',{class:'cl-r'},DATA.employees.filter(function(e){return e.blocked}).length))
+  ));
+  body.appendChild(h('div',{class:'gtitle'},'Управление сотрудниками'));
+  DATA.employees.forEach(function(e){
+    var blockBtn=h('button',{class:'btn sm press mt',style:{background:e.blocked?'var(--green)':'var(--red)',color:'#fff'},onclick:function(){e.blocked=!e.blocked;saveState();render();showIsland(e.blocked?'Сотрудник заблокирован':'Разблокирован',e.blocked?'🚫':'✅',e.blocked?'o':'g')}},e.blocked?'✓ Разблокировать':'🚫 Заблокировать');
+    var resetBtn=h('button',{class:'btn sm card press mt',style:{marginLeft:'6px'},onclick:function(){e.password='1234';saveState();showIsland('Пароль сброшен на 1234','🔑','b')}},'🔑 Сброс пароля');
+    body.appendChild(h('div',{class:'scard'},
+      h('div',{class:'ava '+e.avatar,style:{opacity:e.blocked?0.4:1}},initials(e.name)),
+      h('div',{style:{flex:'1',opacity:e.blocked?0.5:1}},
+        h('b',{},e.name+(e.blocked?' 🚫':'')),
+        h('small',{},e.pos),
+        h('div',{class:'row mt'},blockBtn,resetBtn)
+      )
+    ));
+  });
+  pg.appendChild(body);
+  container.appendChild(pg);
+}
+// ===== ПОДПИСЬ =====
+var pendingSign=null;
+function signSheet(title,desc,onSigned){
+  pendingSign=onSigned;
+  var wrap=h('div',{},h('div',{class:'txt-sm cl-m mb'},desc),h('div',{class:'gtitle'},'✍️ Ваша подпись'));
+  var canvas=h('canvas',{width:'600',height:'180',style:{background:'#fff',borderRadius:'12px',width:'100%',height:'180px',touchAction:'none'}});
+  wrap.appendChild(canvas);
+  wrap.appendChild(h('div',{style:{display:'flex',gap:'8px',marginTop:'10px'}},
+    h('button',{class:'btn card full press',onclick:function(){canvas.getContext('2d').clearRect(0,0,canvas.width,canvas.height)}},'Очистить'),
+    h('button',{class:'btn b full press',onclick:function(){
+      var ctx=canvas.getContext('2d');
+      var data=ctx.getImageData(0,0,canvas.width,canvas.height).data;
+      var empty=true;
+      for(var i=3;i<data.length;i+=4){if(data[i]>0){empty=false;break}}
+      if(empty){showIsland('Поставьте подпись','⚠️','o');return}
+      hideSheet();
+      if(pendingSign)pendingSign();
+      showIsland('Подписано ✍️','✅','g');
+      vib(30);
+    }},'Подписать')
+  ));
+  showSheet(wrap,title);
+  setTimeout(function(){
+    var ctx=canvas.getContext('2d');
+    ctx.strokeStyle='#000';ctx.lineWidth=2.5;ctx.lineCap='round';ctx.lineJoin='round';
+    var drawing=false,lastX=0,lastY=0;
+    function getPos(e){var r=canvas.getBoundingClientRect();var t=e.touches?e.touches[0]:e;return{x:(t.clientX-r.left)*(canvas.width/r.width),y:(t.clientY-r.top)*(canvas.height/r.height)}}
+    function start(e){e.preventDefault();drawing=true;var p=getPos(e);lastX=p.x;lastY=p.y}
+    function move(e){if(!drawing)return;e.preventDefault();var p=getPos(e);ctx.beginPath();ctx.moveTo(lastX,lastY);ctx.lineTo(p.x,p.y);ctx.stroke();lastX=p.x;lastY=p.y}
+    function end(){drawing=false}
+    canvas.addEventListener('touchstart',start);canvas.addEventListener('touchmove',move);canvas.addEventListener('touchend',end);
+    canvas.addEventListener('mousedown',start);canvas.addEventListener('mousemove',move);canvas.addEventListener('mouseup',end);
+  },150);
+}
+// ===== ФОРМУЛЯР =====
+function openFormula(pid){state.page='formula:'+pid;saveState();render()}
+function renderFormula(container,pid){
+  var p=DATA.products.find(function(x){return x.id===pid});
+  if(!p){closePage();return}
+  var pg=h('div',{class:'page on'});
+  pg.appendChild(mkNav('Формуляр '+p.name));
+  var body=h('div',{class:'pg-body'});
+  body.appendChild(h('div',{class:'hero',style:{background:'linear-gradient(140deg,#0aa9d6,#067a9c)'}},
+    h('div',{class:'live'},h('i'),'ЦИФРОВОЙ ПАСПОРТ'),
+    h('h3',{},p.name+' · '+p.serial),
+    h('p',{},'Полная история операций, замеров и ремонтов изделия')
+  ));
+  body.appendChild(h('div',{class:'stat-row'},
+    h('div',{class:'stat'},h('small',{},'Операций'),h('b',{},p.ops.length)),
+    h('div',{class:'stat'},h('small',{},'Принято ОТК'),h('b',{class:'cl-g'},p.ops.filter(function(o){return o.ok}).length))
+  ));
+  body.appendChild(h('div',{class:'gtitle'},'История операций'));
+  var opsCard=h('div',{class:'card',style:{padding:'4px 14px'}});
+  p.ops.forEach(function(o){
+    opsCard.appendChild(h('div',{class:'form-op'},
+      h('div',{class:'fo-dot',style:{background:o.ok?'var(--green)':'var(--orange)'}}),
+      h('div',{class:'fo-t'},h('b',{},o.t),h('small',{},'Исполнитель: '+o.by+(o.ok?' · ✓ принято':' · ⚠ требует внимания'))),
+      h('div',{class:'fo-d'},fmtDate(o.d))
+    ));
+  });
+  body.appendChild(opsCard);
+  body.appendChild(h('button',{class:'btn b full press mt',onclick:function(){
+    signSheet('Запись в формуляр','Подтвердите внесение записи в цифровой паспорт изделия '+p.serial,function(){
+      p.ops.push({t:'Новая запись (ручная)',d:now(),by:state.user.name,ok:true});
+      saveState();render();
+    });
+  }},'✍️ Внести запись с подписью'));
+  body.appendChild(h('button',{class:'btn card full press mt',onclick:function(){exportReport('formula_'+p.serial)}},'📊 Экспорт формуляра'));
+  pg.appendChild(body);
+  container.appendChild(pg);
+}
+// ===== НАРЯДЫ =====
+function openPermits(){state.page='permits';saveState();render()}
+function renderPermits(container){
+  var pg=h('div',{class:'page on'});
+  pg.appendChild(mkNav('Наряд-допуски'));
+  var body=h('div',{class:'pg-body'});
+  var stLabel={active:'Действует',pending:'На согласовании',closed:'Закрыт'};
+  var stCls={active:'tg-g',pending:'tg-o',closed:'tg-gr'};
+  body.appendChild(h('button',{class:'btn b full press mb',onclick:function(){
+    signSheet('Новый наряд-допуск','Подпись выдающего наряд. Ответственность за безопасность работ.',function(){
+      DATA.permits.unshift({id:'НД-'+(203+DATA.permits.length),type:'Электроустановки',place:'Новый участок',who:state.user.name,status:'active'});
+      render();
+    });
+  }},'➕ Оформить наряд-допуск'));
+  DATA.permits.forEach(function(pm){
+    var card=h('div',{class:'permit-card '+pm.status},
+      h('div',{class:'row between'},h('b',{},pm.id+' · '+pm.type),h('span',{class:'tag '+stCls[pm.status]},stLabel[pm.status])),
+      h('div',{class:'txt-sm cl-m mt'},'📍 '+pm.place),
+      h('div',{class:'txt-sm cl-m'},'👷 '+pm.who)
+    );
+    if(pm.status==='pending'){
+      card.appendChild(h('button',{class:'btn b full press mt',onclick:function(){
+        signSheet('Согласование наряда '+pm.id,'Подпись ответственного за безопасное производство работ.',function(){pm.status='active';render()});
+      }},'✍️ Согласовать с подписью'));
+    }else if(pm.status==='active'){
+      card.appendChild(h('button',{class:'btn card full press mt',onclick:function(){pm.status='closed';render();showIsland('Наряд закрыт','🔒','g')}},'🔒 Закрыть наряд'));
+    }
+    body.appendChild(card);
+  });
+  pg.appendChild(body);
+  container.appendChild(pg);
+}
+// ===== ПЕРЕДАЧА СМЕНЫ =====
+function openShift(){state.page='shift';saveState();render()}
+function renderShift(container){
+  var pg=h('div',{class:'page on'});
+  pg.appendChild(mkNav('Передача смены'));
+  var body=h('div',{class:'pg-body'});
+  body.appendChild(h('div',{class:'card',style:{padding:'16px'}},
+    h('div',{class:'row between mb'},h('b',{},'Смена Б (день)'),h('span',{class:'tag tg-g'},'Активна')),
+    h('div',{class:'txt-sm cl-m'},'Мастер: Михайлов С.В. · 08:00–20:00'),
+    h('button',{class:'btn b full press mt',onclick:function(){
+      signSheet('Передача смены','Чек-лист: оборудование остановлено, журнал заполнен, замечания переданы. Подпись сдающего смену.',function(){
+        state.shiftHandovers.unshift({id:uid(),from:state.user.name,time:now()});
+        saveState();render();
+      });
+    }},'🔄 Передать смену с подписью')
+  ));
+  body.appendChild(h('div',{class:'gtitle'},'Чек-лист передачи'));
+  var checks=['Оборудование переведено в безопасный режим','Журнал учёта заполнен','Замечания и проблемы озвучены','Инструмент проверен и сдан','Рабочее место убрано'];
+  var card=h('div',{class:'card',style:{padding:'14px'}});
+  checks.forEach(function(c){
+    card.appendChild(h('button',{class:'check-item press',style:{width:'100%',textAlign:'left'},onclick:function(e){e.currentTarget.classList.toggle('done');vib(10)}},
+      h('span',{class:'check-box'},'✓'),h('span',{class:'check-txt'},c)
+    ));
+  });
+  body.appendChild(card);
+  body.appendChild(h('div',{class:'gtitle'},'Последние передачи'));
+  if(state.shiftHandovers.length===0){body.appendChild(h('div',{class:'empty'},'Передач пока не было'))}
+  else state.shiftHandovers.slice(0,5).forEach(function(sh){
+    body.appendChild(h('div',{class:'card',style:{padding:'12px'}},
+      h('div',{class:'row between'},h('b',{},sh.from),h('span',{class:'tag tg-g'},'✍️ подписано')),
+      h('div',{class:'txt-xs cl-gr mt'},fmtDT(sh.time))
+    ));
+  });
+  pg.appendChild(body);
+  container.appendChild(pg);
+}
+// ===== СКЛАД =====
+function openWarehouse(){state.page='warehouse';saveState();render()}
+function renderWarehouse(container){
+  var pg=h('div',{class:'page on'});
+  pg.appendChild(mkNav('Склад'));
+  var body=h('div',{class:'pg-body'});
+  var low=DATA.warehouse.filter(function(w){return w.stock<w.min});
+  body.appendChild(h('div',{class:'stat-row'},
+    h('div',{class:'stat'},h('small',{},'Позиций'),h('b',{},DATA.warehouse.length)),
+    h('div',{class:'stat'},h('small',{},'Ниже минимума'),h('b',{class:low.length>0?'cl-r':'cl-g'},low.length))
+  ));
+  if(low.length>0){
+    body.appendChild(h('button',{class:'btn b full press mb',onclick:function(){showIsland('Автозаявка отправлена снабжению','📦','g');vib(30)}},'📦 Создать автозаявку снабжению ('+low.length+')'));
+  }
+  body.appendChild(h('div',{class:'gtitle'},'Остатки'));
+  DATA.warehouse.forEach(function(w){
+    var isLow=w.stock<w.min;
+    var pct=clamp(w.stock/(w.min*2)*100,5,100);
+    body.appendChild(h('div',{class:'stock-row'},
+      h('div',{class:'st-i'},w.ico),
+      h('div',{style:{flex:'1'}},h('b',{},w.name),h('small',{},'мин. '+w.min+' '+w.unit),
+        h('div',{class:'progress',style:{marginTop:'6px'}},h('i',{style:{width:pct+'%',background:isLow?'var(--red)':'var(--green)'}}))),
+      h('div',{class:'stock-lvl'},h('b',{class:isLow?'cl-r':'cl-g'},w.stock),h('small',{class:'cl-m',style:{display:'block'}},w.unit))
+    ));
+  });
+  pg.appendChild(body);
+  container.appendChild(pg);
+}
+// ===== ИДЕИ =====
+function openIdeas(){state.page='ideas';saveState();render()}
+function renderIdeas(container){
+  var pg=h('div',{class:'page on'});
+  pg.appendChild(mkNav('Ящик идей'));
+  var body=h('div',{class:'pg-body'});
+  body.appendChild(h('button',{class:'btn b full press mb',onclick:function(){
+    showSheet(h('div',{},
+      h('div',{class:'fld'},h('label',{},'Ваша идея *'),h('textarea',{id:'ideaTxt',rows:'3',style:{width:'100%',background:'var(--card2)',border:'1px solid var(--sep)',color:'var(--label)',padding:'12px',borderRadius:'10px'}})),
+      h('button',{class:'btn b full press',onclick:function(){
+        var t=$('#ideaTxt').value.trim();
+        if(!t){showIsland('Опишите идею','⚠️','o');return}
+        DATA.ideas.unshift({id:uid(),title:t,author:state.user.name,votes:1,my:true});
+        hideSheet();render();
+        showIsland('Идея опубликована 💡','🎉','g');
+      }},'💡 Опубликовать')
+    ),'Новая идея');
+  }},'💡 Предложить идею'));
+  var sorted=DATA.ideas.slice().sort(function(a,b){return b.votes-a.votes});
+  sorted.forEach(function(idea){
+    body.appendChild(h('div',{class:'idea-card'},
+      h('div',{class:'row between',style:{alignItems:'flex-start'}},
+        h('div',{style:{flex:'1'}},h('b',{style:{fontSize:'15px',display:'block',marginBottom:'4px'}},idea.title),h('small',{class:'cl-m'},idea.author)),
+        h('button',{class:'vote press'+(idea.my?' voted':''),onclick:function(){
+          if(idea.my){idea.votes--;idea.my=false}else{idea.votes++;idea.my=true}
+          vib(15);render();
+        }},'👍 '+idea.votes)
+      )
+    ));
+  });
+  pg.appendChild(body);
+  container.appendChild(pg);
+}
+// ===== РЕЙТИНГ =====
+function openRating(){state.page='rating';saveState();render()}
+function renderRating(container){
+  var pg=h('div',{class:'page on'});
+  pg.appendChild(mkNav('Рейтинг и награды'));
+  var body=h('div',{class:'pg-body'});
+  var sorted=DATA.employees.filter(function(e){return!e.blocked}).sort(function(a,b){return b.points-a.points});
+  var me=sorted.findIndex(function(e){return e.id===state.user.id});
+  body.appendChild(h('div',{class:'hero',style:{background:'linear-gradient(140deg,#ffb84d,#e07a00)'}},
+    h('div',{class:'live'},h('i'),'МОТИВАЦИЯ'),
+    h('h3',{},'Ваше место: #'+(me+1)),
+    h('p',{},(state.user.points||0)+' баллов · получайте «спасибо» от коллег')
+  ));
+  sorted.forEach(function(e,i){
+    var isMe=e.id===state.user.id;
+    body.appendChild(h('div',{class:'rating-row',style:isMe?{outline:'2px solid var(--blue)'}:{}},
+      h('div',{class:'rank'+(i===0?' r1':i===1?' r2':i===2?' r3':'')},i+1),
+      h('div',{class:'ava sm '+e.avatar},initials(e.name)),
+      h('div',{style:{flex:'1'}},h('b',{style:{fontSize:'14px'}},e.name+(isMe?' (вы)':'')),h('small',{class:'cl-m'},e.pos)),
+      h('b',{class:'cl-b mon'},e.points)
+    ));
+  });
+  pg.appendChild(body);
+  container.appendChild(pg);
+}
+// ===== ЭКСПОРТ =====
+function exportReport(kind){
+  var csv='КМ·Инженер — отчёт '+kind+'\nДата: '+fmtDT(now())+'\n\n';
+  if(kind==='tasks'){
+    csv+='ID;Заголовок;Статус;Приоритет\n';
+    state.tasksData.forEach(function(t){csv+=t.id+';'+t.title+';'+t.stage+';'+t.priority+'\n'});
+  }else if(kind==='kpi'){
+    csv+='Показатель;Значение\nOEE;81.4%\nБрак;1.2%\nПлан;'+state.kpi.planDone+'/'+state.kpi.planTarget+'\n';
+  }else{
+    csv+='Данные;Значение\nЭкспорт;'+kind+'\n';
+  }
+  var blob=new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'});
+  var a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='km_'+kind+'.csv';
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(function(){a.remove()},500);
+  showIsland('Отчёт выгружен 📊','📊','g');
+  vib(30);
+}
+function openExport(){state.page='export';saveState();render()}
+function renderExport(container){
+  var pg=h('div',{class:'page on'});
+  pg.appendChild(mkNav('Экспорт отчётов'));
+  var body=h('div',{class:'pg-body'});
+  var reports=[
+    {k:'tasks',ico:'📋',t:'Задачи',d:'Все задачи со статусами'},
+    {k:'kpi',ico:'📊',t:'KPI производства',d:'OEE, брак, выполнение плана'},
+    {k:'staff',ico:'👥',t:'Штат',d:'Список сотрудников'}
+  ];
+  reports.forEach(function(r){
+    body.appendChild(h('button',{class:'card press',style:{padding:'16px',display:'flex',gap:'12px',alignItems:'center',width:'100%',textAlign:'left'},onclick:function(){exportReport(r.k)}},
+      h('div',{style:{width:'42px',height:'42px',borderRadius:'12px',background:'var(--card2)',display:'grid',placeItems:'center',fontSize:'20px'}},r.ico),
+      h('div',{style:{flex:'1'}},h('b',{style:{fontSize:'15px',display:'block'}},r.t),h('small',{class:'cl-m'},r.d)),
+      h('span',{class:'tag tg-b'},'CSV')
+    ));
+  });
+  body.appendChild(h('div',{class:'txt-xs cl-gr txt-c mt'},'Файлы скачиваются в формате CSV'));
+  pg.appendChild(body);
+  container.appendChild(pg);
+}
+// ===== ГЛОБАЛЬНЫЙ ПОИСК =====
+function openGlobalSearch(){state.page='globalsearch';saveState();render()}
+function renderGlobalSearch(container){
+  var pg=h('div',{class:'page on'});
+  pg.appendChild(mkNav('Поиск'));
+  var body=h('div',{class:'pg-body'});
+  var searchBox=h('div',{class:'search'},
+    h('svg',{viewBox:'0 0 24 24',style:{width:'16px',height:'16px',stroke:'var(--gray)',fill:'none','stroke-width':'2'}},h('circle',{cx:'11',cy:'11',r:'8'}),h('path',{d:'M21 21l-4.35-4.35'})),
+    h('input',{placeholder:'Люди, задачи, изделия, новости…',oninput:function(e){doGlobalSearch(e.target.value,$('#gsResults'))}})
+  );
+  body.appendChild(searchBox);
+  var results=h('div',{id:'gsResults'});
+  body.appendChild(results);
+  doGlobalSearch('',results);
+  pg.appendChild(body);
+  container.appendChild(pg);
+}
+function doGlobalSearch(q,results){
+  if(!results)return;
+  results.innerHTML='';
+  q=q.toLowerCase().trim();
+  function grp(title,icon,items){
+    if(items.length===0)return;
+    results.appendChild(h('div',{class:'gs-group'},h('div',{class:'gs-head'},icon,' ',title,' · '+items.length),items));
+  }
+  var emps=q?DATA.employees.filter(function(e){return e.name.toLowerCase().indexOf(q)>=0||e.pos.toLowerCase().indexOf(q)>=0||e.badge.indexOf(q)>=0}):DATA.employees.slice(0,3);
+  grp('Сотрудники','👥',emps.map(function(e){return h('button',{class:'gs-item press',onclick:function(){openEmployee(e)}},h('div',{class:'gi ava '+e.avatar,style:{width:'38px',height:'38px'}},initials(e.name)),h('div',{style:{flex:'1'}},h('b',{},e.name),h('small',{},e.pos)))}));
+  var tasks=q?state.tasksData.filter(function(t){return t.title.toLowerCase().indexOf(q)>=0||t.id.toLowerCase().indexOf(q)>=0}):state.tasksData.slice(0,3);
+  grp('Задачи','📋',tasks.map(function(t){return h('button',{class:'gs-item press',onclick:function(){openTaskDetail(t.id)}},h('div',{class:'gi',style:{background:'var(--card2)'}},'📋'),h('div',{style:{flex:'1'}},h('b',{},t.title),h('small',{},t.id)))}));
+  var prods=q?DATA.products.filter(function(p){return p.name.toLowerCase().indexOf(q)>=0}):DATA.products;
+  grp('Изделия','⚙️',prods.map(function(p){return h('button',{class:'gs-item press',onclick:function(){openFormula(p.id)}},h('div',{class:'gi',style:{background:'var(--card2)'}},'⚙️'),h('div',{style:{flex:'1'}},h('b',{},p.name),h('small',{},p.type)))}));
+  var news=q?DATA.news.filter(function(n){return n.title.toLowerCase().indexOf(q)>=0}):DATA.news.slice(0,2);
+  grp('Газета','📰',news.map(function(n){return h('button',{class:'gs-item press',onclick:function(){openNewsDetail(n)}},h('div',{class:'gi',style:{background:'var(--card2)'}},n.emoji),h('div',{style:{flex:'1'}},h('b',{},n.title),h('small',{},n.cat)))}));
+  if(results.children.length===0)results.appendChild(h('div',{class:'empty'},'По запросу «'+q+'» ничего не найдено'));
+}
+// ===== УВЕДОМЛЕНИЯ =====
+function openNotifCenter(){state.page='notifcenter';state.notifs.forEach(function(n){n.read=true});saveState();render()}
+function renderNotifCenter(container){
+  var pg=h('div',{class:'page on'});
+  pg.appendChild(mkNav('Уведомления'));
+  var body=h('div',{class:'pg-body'});
+  body.appendChild(h('div',{class:'gtitle'},'Настройки'));
+  var prefs=[{k:'urgent',l:'🚨 Только срочное'},{k:'tasks',l:'📋 Задачи'},{k:'chats',l:'💬 Чаты'},{k:'ai',l:'🤖 Инсайты ИИ'}];
+  var card=h('div',{class:'card'});
+  prefs.forEach(function(p){
+    card.appendChild(h('div',{class:'grow'},
+      h('b',{style:{flex:'1',fontSize:'14px'}},p.l),
+      h('button',{class:'tgl'+(state.notifPrefs[p.k]?' on':''),onclick:function(e){state.notifPrefs[p.k]=!state.notifPrefs[p.k];e.target.classList.toggle('on');saveState()}})
+    ));
+  });
+  body.appendChild(card);
+  body.appendChild(h('div',{class:'gtitle'},'Последние'));
+  if(state.notifs.length===0){body.appendChild(h('div',{class:'empty'},'Нет уведомлений'))}
+  else state.notifs.slice(0,15).forEach(function(n){
+    body.appendChild(h('div',{class:'notif-item'+(n.urgent?' urgent':'')},
+      h('div',{class:'ni',style:{background:'var(--card2)'}},n.icon),
+      h('div',{style:{flex:'1'}},h('b',{},n.title),h('small',{},n.text)),
+      h('span',{class:'nt'},fmtDT(n.time))
+    ));
+  });
+  pg.appendChild(body);
+  container.appendChild(pg);
+}
+// ===== НОВЫЙ ЧАТ =====
+function openNewChat(){state.page='newchat';saveState();render()}
+function renderNewChat(container){
+  var pg=h('div',{class:'page on'});
+  pg.appendChild(mkNav('Новый чат'));
+  var body=h('div',{class:'pg-body'});
+  var list=h('div',{class:'card'});
+  DATA.employees.forEach(function(e){
+    list.appendChild(h('button',{class:'grow press',onclick:function(){startDMChat(e)}},
+      h('div',{class:'ava sm '+e.avatar},initials(e.name)),
+      h('div',{style:{flex:'1',textAlign:'left'}},h('b',{style:{fontSize:'14px'}},e.name),h('small',{class:'cl-m'},e.pos)),
+      h('span',{style:{color:'var(--gray)'}},'›')
+    ));
+  });
+  body.appendChild(list);
+  pg.appendChild(body);
+  container.appendChild(pg);
+}
+function startDMChat(e){
+  var c=state.chatsData.find(function(x){return x.userId===e.id&&x.type==='dm'});
+  if(!c){c={id:uid(),userId:e.id,last:e.name,msg:'Начните общение',time:now(),unread:0,type:'dm'};state.chatsData.unshift(c)}
+  saveState();
+  openChat(c.id);
+}
+// ===== ЧАТЫ =====
+function renderChats(view){
+  view.appendChild(h('div',{class:'large-title'},'Чаты'));
+  view.appendChild(h('div',{class:'hdr'},
+    h('div',{style:{flex:'1'}}),
+    h('button',{class:'hdr-btn press',onclick:openNewChat},h('svg',{viewBox:'0 0 24 24'},h('path',{d:'M12 5v14M5 12h14'}))),
+    h('button',{class:'hdr-btn press',onclick:function(){state.page='vcs-lobby';saveState();render()}},h('svg',{viewBox:'0 0 24 24'},h('path',{d:'M23 7l-7 5 7 5V7z'}),h('rect',{x:'1',y:'5',width:'15',height:'14',rx:'2'})))
+  ));
+  var list=h('div',{});
+  list.appendChild(h('div',{class:'msg press',onclick:openAIChat,style:{background:'linear-gradient(90deg,rgba(10,132,255,.08),transparent)',borderRadius:'14px'}},
+    h('div',{class:'ico',style:{background:'linear-gradient(150deg,#5fc9f5,#0a84ff)'}},'🤖'),
+    h('div',{style:{flex:'1'}},h('b',{},'ИИ-ассистент'),h('small',{},'Голос, прогнозы, память · уровень '+aiLevel().t)),
+    h('div',{class:'t',style:{color:'var(--blue)'}},'ОНЛАЙН')
+  ));
+  list.appendChild(h('div',{class:'gtitle'},'Сообщения'));
+  state.chatsData.forEach(function(c){
+    var emp=DATA.employees.find(function(e){return e.id===c.userId});
+    var icon=c.type==='group'?'👥':(emp?initials(emp.name):'💬');
+    list.appendChild(h('div',{class:'msg press'+(c.unread>0?' un':''),onclick:function(){openChat(c.id)},style:{borderRadius:'14px'}},
+      h('div',{class:'ava '+(emp?emp.avatar:'gray')},icon),
+      h('div',{style:{flex:'1'}},h('b',{},c.last),h('small',{},c.msg)),
+      h('div',{style:{textAlign:'right'}},h('div',{class:'t'},fmtTime(c.time)),c.unread>0?h('div',{class:'ub'},c.unread):null)
+    ));
+  });
+  view.appendChild(list);
+}
+var chatId=null,chatMsgs={},openReactPop=null;
+function openChat(id){
+  var c=state.chatsData.find(function(x){return x.id===id});
+  if(c){c.unread=0;saveState()}
+  chatId=id;
+  if(!chatMsgs[id])chatMsgs[id]=generateChatHistory(id);
+  state.page='chat';saveState();render();
+}
+function generateChatHistory(id){
+  var msgs=[],u=state.user,c=state.chatsData.find(function(x){return x.id===id});
+  if(!c)return msgs;
+  var emp=DATA.employees.find(function(e){return e.id===c.userId});
+  var partner=emp?emp.name:'Команда';
+  msgs.push({id:uid(),from:partner,text:'Здравствуйте, '+u.name.split(' ')[1]+'! Как дела с задачей?',time:ago(4*3600000),me:false,reactions:{}});
+  msgs.push({id:uid(),from:u.name,text:'Добрый день! В работе.',time:ago(3.5*3600000),me:true,reactions:{}});
+  msgs.push({id:uid(),from:partner,text:c.msg,time:ago(1*3600000),me:false,reactions:{}});
+  return msgs;
+}
+function renderChatPage(container){
+  var c=state.chatsData.find(function(x){return x.id===chatId});
+  if(!c)return;
+  var emp=DATA.employees.find(function(e){return e.id===c.userId});
+  var partner=emp?emp.name:c.last;
+  var pg=h('div',{class:'page on'});
+  var nav=h('div',{class:'nav'},
+    h('button',{class:'back press',onclick:closePage},h('span',{class:'ch'},'‹'),'Чаты'),
+    h('div',{class:'nav-title'},partner),h('div',{class:'nav-sp'})
+  );
+  pg.appendChild(nav);
+  var hd=h('div',{class:'chat-hd'},
+    h('div',{class:'ava '+(emp?emp.avatar:'gray')},emp?initials(emp.name):(c.type==='group'?'👥':'💬')),
+    h('div',{style:{flex:'1'}},h('b',{},partner),h('small',{},emp?emp.pos:'Групповой чат'))
+  );
+  if(emp){
+    hd.appendChild(h('button',{class:'hdr-btn press',onclick:function(){startCall(emp)}},h('svg',{viewBox:'0 0 24 24',style:{stroke:'var(--green)'}},h('path',{d:'M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z'}))));
+  }
+  pg.appendChild(hd);
+  var msgs=h('div',{class:'chat-msgs',id:'chatMsgs'});
+  renderChatMsgs(msgs);
+  pg.appendChild(msgs);
+  pg.appendChild(h('div',{class:'chat-input'},
+    h('textarea',{class:'inp',rows:'1',placeholder:'Сообщение…',dataset:{id:'msgInput'}}),
+    h('button',{class:'send press',onclick:sendChatMsg},h('svg',{viewBox:'0 0 24 24'},h('path',{d:'M22 2L11 13M22 2l-7 20-4-9-9-4z'})))
+  ));
+  container.appendChild(pg);
+  setTimeout(function(){var m=$('#chatMsgs');if(m)m.scrollTop=m.scrollHeight},50);
+}
+function renderChatMsgs(container){
+  container.innerHTML='';
+  (chatMsgs[chatId]||[]).forEach(function(m){
+    var row=h('div',{class:'mrow'+(m.me?' me':'')});
+    var bub=h('div',{class:'bub'+(m.me?' me':' them')});
+    bub.appendChild(h('span',{},m.text));
+    bub.appendChild(h('span',{class:'tm'},fmtTime(m.time)));
+    row.appendChild(bub);
+    if(m.reactions&&Object.keys(m.reactions).length>0){
+      var rr=h('div',{class:'react-row'});
+      for(var emo in m.reactions){
+        (function(e){rr.appendChild(h('button',{class:'react-chip press',onclick:function(){addReaction(m.id,e)}},e+' '+m.reactions[e]))})(emo);
+      }
+      row.appendChild(rr);
+    }
+    row.appendChild(h('button',{class:'react-add press',onclick:function(){toggleReactPop(m.id,row)}},'😊'));
+    container.appendChild(row);
+  });
+}
+function toggleReactPop(msgId,rowEl){
+  if(openReactPop){openReactPop.remove();openReactPop=null;return}
+  var pop=h('div',{class:'react-pop'});
+  ['👍','❤️','😂','🔥','🎉','👀'].forEach(function(emo){
+    pop.appendChild(h('button',{onclick:function(){addReaction(msgId,emo);pop.remove();openReactPop=null}},emo));
+  });
+  rowEl.appendChild(pop);
+  openReactPop=pop;
+  vib(10);
+}
+function addReaction(msgId,emo){
+  var msgs=chatMsgs[chatId]||[];
+  var m=msgs.find(function(x){return x.id===msgId});
+  if(!m)return;
+  if(!m.reactions)m.reactions={};
+  m.reactions[emo]=(m.reactions[emo]||0)+1;
+  saveState();vib(15);
+  var cm=$('#chatMsgs');
+  if(cm)renderChatMsgs(cm);
+}
+function sendChatMsg(){
+  var inp=$('[data-id="msgInput"]');
+  if(!inp)return;
+  var text=inp.value.trim();
+  if(!text)return;
+  var msgs=chatMsgs[chatId]||[];
+  msgs.push({id:uid(),from:state.user.name,text:text,time:now(),me:true,reactions:{}});
+  chatMsgs[chatId]=msgs;
+  inp.value='';
+  var c=state.chatsData.find(function(x){return x.id===chatId});
+  if(c){c.msg=text;c.time=now()}
+  saveState();
+  var m=$('#chatMsgs');
+  if(m){renderChatMsgs(m);m.scrollTop=m.scrollHeight}
+  vib(10);
+  setTimeout(function(){
+    var emp=DATA.employees.find(function(e){return c&&e.id===c.userId});
+    var replies=['Понял, спасибо!','Сделаю','Хорошо, учту.','Ок, принято.'];
+    msgs.push({id:uid(),from:emp?emp.name:'Собеседник',text:replies[Math.floor(Math.random()*replies.length)],time:now(),me:false,reactions:{}});
+    if(m){renderChatMsgs(m);m.scrollTop=m.scrollHeight}
+  },1500);
+}
+// ===== ЗВОНКИ =====
+var call={status:'idle',user:null,sec:0,timer:null,ringTimer:null};
+function startCall(emp){
+  if(!emp)return;
+  if(emp.blocked){showIsland('Сотрудник заблокирован','🚫','o');return}
+  if(call.status!=='idle')endCall(true);
+  call={status:'dialing',user:emp,sec:0,timer:null,ringTimer:null};
+  state.page='call';saveState();render();
+  call.ringTimer=setInterval(function(){},3000);
+  setTimeout(function(){
+    if(call.status!=='dialing')return;
+    if(call.user.present==='off'){
+      call.status='noanswer';clearInterval(call.ringTimer);vib([80,60,80]);
+      var cp=$('.page.on');if(cp)renderCallPage(cp,true);return;
+    }
+    call.status='active';clearInterval(call.ringTimer);vib([30,40,30]);
+    call.timer=setInterval(function(){call.sec++;var t=$('#callTimer');if(t)t.textContent=fmtDur(call.sec)},1000);
+    var cp=$('.page.on');if(cp&&state.page==='call')renderCallPage(cp,true);
+  },2500);
+}
+function endCall(silent){
+  var u=call.user,st=call.status,dur=call.sec;
+  clearInterval(call.timer);clearInterval(call.ringTimer);
+  call={status:'idle',user:null,sec:0,timer:null,ringTimer:null};
+  if(u){state.calls.unshift({id:uid(),empId:u.id,name:u.name,time:now(),dur:st==='active'?dur:0,type:st==='active'?'out':'missed'});if(state.calls.length>30)state.calls.pop();saveState()}
+  if(!silent)closePage();
+}
+function renderCallPage(container,refresh){
+  if(refresh)container.innerHTML='';
+  var u=call.user;
+  if(!u){closePage();return}
+  var pg=refresh?container:h('div',{class:'page on'});
+  if(!refresh)pg.className='page on';
+  pg.appendChild(h('div',{class:'nav'},
+    h('button',{class:'back press',onclick:function(){endCall()}},h('span',{class:'ch'},'‹')),
+    h('div',{class:'nav-title'},'Звонок'),h('div',{class:'nav-sp'})
+  ));
+  var body=h('div',{class:'call-body'});
+  var st=call.status;
+  body.appendChild(h('div',{class:'call-ava '+u.avatar+(st==='active'?' connected':'')},initials(u.name)));
+  body.appendChild(h('h2',{class:'disp',style:{fontSize:'24px',marginTop:'16px'}},u.name));
+  body.appendChild(h('div',{class:'txt-sm cl-m'},u.pos));
+  body.appendChild(h('div',{class:'mt mon',id:'callTimer',style:{fontSize:'18px',color:'var(--blue)'}},st==='active'?fmtDur(call.sec):st==='noanswer'?'Не отвечает':'Вызов…'));
+  if(st==='noanswer'){
+    body.appendChild(h('button',{class:'btn b full press',style:{maxWidth:'280px',marginTop:'24px'},onclick:function(){endCall()}},'Завершить'));
+  }else{
+    body.appendChild(h('div',{class:'vcs-ctrl',style:{marginTop:'30px'}},
+      h('button',{class:'press',onclick:function(e){e.currentTarget.classList.toggle('on')}},h('svg',{viewBox:'0 0 24 24'},h('path',{d:'M11 5L6 9H2v6h4l5 4V5z'}))),
+      h('button',{class:'press',onclick:function(e){e.currentTarget.classList.toggle('on');vib(15)}},h('svg',{viewBox:'0 0 24 24'},h('path',{d:'M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z'}))),
+      h('button',{class:'end press',onclick:function(){endCall()}},h('svg',{viewBox:'0 0 24 24'},h('path',{d:'M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z',transform:'rotate(135 12 12)'})))
+    ));
+    body.appendChild(h('div',{class:'txt-xs cl-gr mt'},'🔒 Звонок внутри приложения'));
+  }
+  pg.appendChild(body);
+  if(!refresh)container.appendChild(pg);
+}
+// ===== ВКС =====
+var vcsStream=null,vcsTimer=null,vcsSec=0,vcsRoom=null;
+function renderVCSLobby(container){
+  var pg=h('div',{class:'page on'});
+  pg.appendChild(mkNav('Видеоконференции'));
+  var body=h('div',{class:'pg-body'});
+  body.appendChild(h('div',{class:'gtitle'},'Быстрый созвон'));
+  var card=h('div',{class:'card',style:{padding:'4px'}});
+  DATA.employees.slice(0,5).forEach(function(e){
+    card.appendChild(h('button',{class:'grow press',onclick:function(){joinVCS(e)}},
+      h('div',{class:'ava sm '+e.avatar},initials(e.name)),
+      h('div',{style:{flex:'1',textAlign:'left'}},h('b',{style:{fontSize:'14px'}},e.name)),
+      h('span',{class:'tag tg-b'},'🎥 ВКС')
+    ));
+  });
+  body.appendChild(card);
+  pg.appendChild(body);
+  container.appendChild(pg);
+}
+function joinVCS(e){
+  vcsRoom={id:uid(),title:'ВКС',participants:[state.user,e]};
+  state.page='vcs-room';saveState();render();
+}
+function renderVCSRoom(container){
+  if(!vcsRoom)return;
+  var pg=h('div',{class:'page on'});
+  pg.appendChild(mkNav(vcsRoom.title));
+  var body=h('div',{class:'pg-body'});
+  body.appendChild(h('div',{class:'vcs-timer',id:'vcsTimer'},'00:00'));
+  var grid=h('div',{class:'vcs-grid'});
+  vcsRoom.participants.forEach(function(p,i){
+    var tile=h('div',{class:'vcs-tile'},h('div',{style:{fontSize:'32px',fontWeight:'700'}},initials(p.name)),h('div',{class:'nm'},p.name.split(' ')[1]));
+    if(i===0)tile.dataset.me='1';
+    grid.appendChild(tile);
+  });
+  body.appendChild(grid);
+  body.appendChild(h('div',{class:'vcs-ctrl'},
+    h('button',{class:'press',onclick:function(e){e.currentTarget.classList.toggle('on');vib(15)}},h('svg',{viewBox:'0 0 24 24'},h('path',{d:'M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z'}))),
+    h('button',{class:'press',onclick:function(){toggleVCSCam()}},h('svg',{viewBox:'0 0 24 24'},h('path',{d:'M23 7l-7 5 7 5V7z'}),h('rect',{x:'1',y:'5',width:'15',height:'14',rx:'2'}))),
+    h('button',{class:'end press',onclick:leaveVCS},h('svg',{viewBox:'0 0 24 24'},h('path',{d:'M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72z',transform:'rotate(135 12 12)'})))
+  ));
+  pg.appendChild(body);
+  container.appendChild(pg);
+  vcsSec=0;
+  vcsTimer=setInterval(function(){vcsSec++;var t=$('#vcsTimer');if(t)t.textContent=fmtDur(vcsSec)},1000);
+}
+function toggleVCSCam(){
+  var btn=event&&event.currentTarget;
+  if(vcsStream){
+    vcsStream.getTracks().forEach(function(t){t.stop()});
+    vcsStream=null;
+    $$('.vcs-tile video').forEach(function(v){v.remove()});
+    showIsland('Камера выключена','📹','');
+    return;
+  }
+  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){showIsland('Камера недоступна','❌','o');return}
+  navigator.mediaDevices.getUserMedia({video:true,audio:false}).then(function(stream){
+    vcsStream=stream;
+    var me=$('.vcs-tile[data-me]');
+    if(me){var v=h('video',{autoplay:true,playsinline:true,muted:true});v.srcObject=stream;me.insertBefore(v,me.firstChild)}
+    showIsland('Камера включена','📹','g');
+  }).catch(function(){showIsland('Нет доступа к камере','❌','o')});
+}
+function leaveVCS(){
+  if(vcsTimer)clearInterval(vcsTimer);
+  if(vcsStream){vcsStream.getTracks().forEach(function(t){t.stop()});vcsStream=null}
+  vcsRoom=null;
+  closePage();
+}
+// ===== ЗАДАЧИ =====
+var tasksFilter='my';
+function renderTasks(view){
+  view.appendChild(h('div',{class:'large-title'},'Задачи'));
+  var seg=h('div',{class:'seg'});
+  seg.appendChild(h('button',{class:tasksFilter==='my'?'on':'',onclick:function(){tasksFilter='my';render()}},'Мои'));
+  seg.appendChild(h('button',{class:tasksFilter==='all'?'on':'',onclick:function(){tasksFilter='all';render()}},'Все'));
+  seg.appendChild(h('button',{class:tasksFilter==='fav'?'on':'',onclick:function(){tasksFilter='fav';render()}},'⭐ Избр'));
+  seg.appendChild(h('button',{class:tasksFilter==='done'?'on':'',onclick:function(){tasksFilter='done';render()}},'Готово'));
+  view.appendChild(seg);
+  var list=h('div',{});
+  var u=state.demoMode||state.user;
+  var tasks=state.tasksData;
+  if(tasksFilter==='my')tasks=tasks.filter(function(t){return t.executor===u.id});
+  else if(tasksFilter==='done')tasks=tasks.filter(function(t){return t.stage==='done'});
+  else if(tasksFilter==='fav')tasks=tasks.filter(function(t){return state.favorites.tasks.indexOf(t.id)>=0});
+  if(tasks.length===0)list.appendChild(h('div',{class:'empty'},'Нет задач'));
+  else tasks.forEach(function(t){list.appendChild(renderTaskCard(t,false))});
+  view.appendChild(list);
+}
+function isOverdue(t){return t.stage!=='done'&&new Date(t.due)<now()}
+function priCls(p){return p==='high'?'tg-r':p==='med'?'tg-o':'tg-b'}
+function priText(p){return p==='high'?'Высокий':p==='med'?'Средний':'Низкий'}
+function checklistProgress(t){
+  if(!t.checklist||t.checklist.length===0)return null;
+  var done=t.checklist.filter(function(c){return c.d}).length;
+  return{done:done,total:t.checklist.length,pct:Math.round(done/t.checklist.length*100)};
+}
+function renderTaskCard(t,compact){
+  var executor=DATA.employees.find(function(e){return e.id===t.executor});
+  var overdue=isOverdue(t);
+  var card=h('div',{class:'tcard press',onclick:function(){openTaskDetail(t.id)}});
+  var r1=h('div',{class:'r1'},
+    h('span',{class:'tid'},t.id),
+    t.ai?h('span',{class:'tag tg-p'},'🤖 ИИ'):null,
+    h('span',{class:'tag '+priCls(t.priority)},priText(t.priority)),
+    overdue?h('span',{class:'tag tg-r'},'Просрочено'):null,
+    h('button',{class:'fav-btn'+(state.favorites.tasks.indexOf(t.id)>=0?' on':''),onclick:function(e){e.stopPropagation();toggleFavTask(t.id)}},state.favorites.tasks.indexOf(t.id)>=0?'★':'☆'),
+    h('span',{class:'due'+(overdue?' late':'')},fmtDT(new Date(t.due)))
+  );
+  card.appendChild(r1);
+  card.appendChild(h('b',{class:'tt'},t.title));
+  if(!compact&&t.desc)card.appendChild(h('div',{class:'desc'},t.desc));
+  var cp=checklistProgress(t);
+  if(cp&&!compact){
+    card.appendChild(h('div',{class:'txt-xs cl-m row between'},h('span',{},'✅ Чек-лист: '+cp.done+'/'+cp.total),h('span',{},cp.pct+'%')));
+    card.appendChild(h('div',{class:'progress'},h('i',{style:{width:cp.pct+'%'}})));
+  }
+  if(executor){
+    card.appendChild(h('div',{class:'who',style:{marginTop:'8px'}},h('div',{class:'ava '+executor.avatar,style:{width:'22px',height:'22px',fontSize:'9px'}},initials(executor.name)),h('span',{},executor.name.split(' ').slice(0,2).join(' '))));
+  }
+  if(!compact){
+    var stage=h('div',{class:'stage'});
+    var stages=[{k:'new',l:'Новая'},{k:'work',l:'В работе'},{k:'review',l:'Проверка'},{k:'done',l:'Готово'}];
+    var cur=stages.findIndex(function(s){return s.k===t.stage});
+    stages.forEach(function(s,i){
+      stage.appendChild(h('div',{class:'step'+(i<cur?' done':'')+(i===cur?' on':'')},h('div',{class:'dot'},i<cur?'✓':String(i+1)),h('b',{},s.l)));
+    });
+    card.appendChild(stage);
+  }
+  return card;
+}
+function toggleFavTask(id){
+  var i=state.favorites.tasks.indexOf(id);
+  if(i>=0)state.favorites.tasks.splice(i,1);
+  else state.favorites.tasks.push(id);
+  saveState();vib(10);render();
+}
+function toggleFavEmp(id){
+  var i=state.favorites.employees.indexOf(id);
+  if(i>=0)state.favorites.employees.splice(i,1);
+  else state.favorites.employees.push(id);
+  saveState();vib(10);render();
+}
+function openTaskDetail(id){state.page='task:'+id;saveState();render()}
+function renderTaskDetail(container,id){
+  var t=state.tasksData.find(function(x){return x.id===id});
+  if(!t)return;
+  var executor=DATA.employees.find(function(e){return e.id===t.executor});
+  var pg=h('div',{class:'page on'});
+  pg.appendChild(mkNav(t.id));
+  var body=h('div',{class:'pg-body'});
+  body.appendChild(h('div',{class:'row between mb'},
+    h('span',{class:'tag '+priCls(t.priority)},priText(t.priority)),
+    h('button',{class:'fav-btn'+(state.favorites.tasks.indexOf(t.id)>=0?' on':''),style:{fontSize:'24px'},onclick:function(){toggleFavTask(t.id)}},state.favorites.tasks.indexOf(t.id)>=0?'★':'☆')
+  ));
+  body.appendChild(h('h2',{class:'disp',style:{fontSize:'22px',marginBottom:'14px'}},t.title));
+  body.appendChild(h('p',{style:{color:'var(--label2)',lineHeight:'1.5',marginBottom:'20px'}},t.desc));
+  var clCard=h('div',{class:'card',style:{padding:'14px'}});
+  clCard.appendChild(h('div',{class:'row between mb'},h('b',{},'📝 Чек-лист'),checklistProgress(t)?h('span',{class:'tag tg-b'},checklistProgress(t).pct+'%'):null));
+  (t.checklist||[]).forEach(function(c,i){
+    clCard.appendChild(h('div',{class:'check-item'+(c.d?' done':'')},
+      h('button',{class:'check-box press',onclick:function(){c.d=!c.d;saveState();render()}},c.d?'✓':''),
+      h('span',{class:'check-txt'},c.t),
+      h('button',{class:'check-del press',onclick:function(){t.checklist.splice(i,1);saveState();render()}},'✕')
+    ));
+  });
+  clCard.appendChild(h('div',{class:'add-check'},
+    h('input',{id:'newCheckTxt',placeholder:'Новый шаг…'}),
+    h('button',{class:'press',onclick:function(){
+      var inp=$('#newCheckTxt');if(!inp)return;
+      var v=inp.value.trim();if(!v){showIsland('Введите шаг','⚠️','o');return}
+      if(!t.checklist)t.checklist=[];
+      t.checklist.push({t:v,d:false});saveState();render();
+    }},'+')
+  ));
+  body.appendChild(clCard);
+  if(executor){
+    body.appendChild(h('div',{class:'gtitle'},'👤 Исполнитель'));
+    body.appendChild(h('div',{class:'scard'},
+      h('div',{class:'ava '+executor.avatar},initials(executor.name)),
+      h('div',{style:{flex:'1'}},h('b',{},executor.name),h('small',{},executor.pos)),
+      h('div',{class:'acts'},h('button',{class:'press',onclick:function(){startCall(executor)}},h('svg',{viewBox:'0 0 24 24',style:{stroke:'var(--green)'}},h('path',{d:'M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72z'}))))
+    ));
+  }
+  body.appendChild(h('div',{class:'gtitle'},'⚙️ Действия'));
+  body.appendChild(h('div',{style:{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'8px'}},
+    h('button',{class:'btn card press',onclick:function(){t.stage='work';saveState();showIsland('Взято в работу','✅','g');render()}},'▶ Взять'),
+    h('button',{class:'btn card press',onclick:function(){t.stage='done';saveState();showIsland('Завершено','🎉','g');render()}},'✓ Готово')
+  ));
+  pg.appendChild(body);
+  container.appendChild(pg);
+}
+function openNewTask(){state.page='newtask';saveState();render()}
+function renderNewTask(container){
+  var pg=h('div',{class:'page on'});
+  pg.appendChild(mkNav('Новая задача'));
+  var body=h('div',{class:'pg-body'});
+  body.appendChild(h('div',{class:'fld'},h('label',{},'Заголовок *'),h('input',{id:'ntTitle',placeholder:'Что нужно сделать?'})));
+  body.appendChild(h('div',{class:'fld'},h('label',{},'Описание'),h('textarea',{id:'ntDesc',placeholder:'Подробности...',rows:'3',style:{width:'100%',background:'var(--card)',border:'1px solid var(--sep)',color:'var(--label)',padding:'13px 15px',borderRadius:'12px',fontSize:'16px'}})));
+  var selF=h('div',{class:'fld'},h('label',{},'Исполнитель *'));
+  var sel=h('select',{id:'ntExec'});
+  sel.appendChild(h('option',{value:''},'— выберите —'));
+  DATA.employees.forEach(function(e){sel.appendChild(h('option',{value:e.id},e.name))});
+  selF.appendChild(sel);
+  body.appendChild(selF);
+  body.appendChild(h('div',{class:'fld'},h('label',{},'Срок'),h('input',{id:'ntDue',type:'date'})));
+  body.appendChild(h('button',{class:'btn b full press mt',onclick:submitNewTask},'Создать задачу'));
+  pg.appendChild(body);
+  container.appendChild(pg);
+}
+function submitNewTask(){
+  var title=$('#ntTitle').value.trim(),desc=$('#ntDesc').value.trim(),exec=$('#ntExec').value,due=$('#ntDue').value;
+  if(!title){showIsland('Введите заголовок','⚠️','o');return}
+  if(!exec){showIsland('Выберите исполнителя','⚠️','o');return}
+  var id='KZ-'+(1050+state.tasksData.length);
+  state.tasksData.unshift({id:id,title:title,desc:desc,executor:exec,stage:'new',priority:'med',due:new Date(due||Date.now()+72*3600000),checklist:[]});
+  saveState();
+  showIsland('Задача '+id+' создана','✅','g');
+  vib(30);
+  closePage();
+}
+// ===== ШТАТ =====
+var staffQ='';
+function renderStaffTab(view){
+  view.appendChild(h('div',{class:'large-title'},'Штат'));
+  view.appendChild(h('div',{class:'search'},
+    h('svg',{viewBox:'0 0 24 24',style:{width:'16px',height:'16px',stroke:'var(--gray)',fill:'none','stroke-width':'2'}},h('circle',{cx:'11',cy:'11',r:'8'}),h('path',{d:'M21 21l-4.35-4.35'})),
+    h('input',{placeholder:'ФИО, должность, табельный, телефон',value:staffQ,oninput:function(e){staffQ=e.target.value;renderStaffTabList($('#staffTabList'))}})
+  ));
+  var online=DATA.employees.filter(function(e){return e.present==='on'}).length;
+  view.appendChild(h('div',{class:'txt-sm cl-m mb'},'Всего: '+DATA.employees.length+' · Онлайн: '+online));
+  var list=h('div',{id:'staffTabList'});
+  view.appendChild(list);
+  renderStaffTabList(list);
+}
+function staffCard(e){
+  return h('div',{class:'scard press',onclick:function(){openEmployee(e)}},
+    h('div',{class:'ava '+e.avatar,style:{position:'relative'}},initials(e.name),h('span',{class:'pres '+e.present})),
+    h('div',{style:{flex:'1',minWidth:'0'}},h('b',{},e.name),h('small',{},e.pos),h('small',{class:'cl-gr txt-xs'},e.dept+' · вн. '+e.ext)),
+    h('button',{class:'fav-btn'+(state.favorites.employees.indexOf(e.id)>=0?' on':''),onclick:function(ev){ev.stopPropagation();toggleFavEmp(e.id)}},state.favorites.employees.indexOf(e.id)>=0?'★':'☆'),
+    h('div',{class:'acts'},
+      h('button',{class:'press',onclick:function(ev){ev.stopPropagation();startCall(e)}},h('svg',{viewBox:'0 0 24 24',style:{stroke:'var(--green)'}},h('path',{d:'M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72z'}))),
+      h('button',{class:'press',onclick:function(ev){ev.stopPropagation();joinVCS(e)}},h('svg',{viewBox:'0 0 24 24',style:{stroke:'var(--blue)'}},h('path',{d:'M23 7l-7 5 7 5V7z'}),h('rect',{x:'1',y:'5',width:'15',height:'14',rx:'2'})))
+    )
+  );
+}
+function renderStaffTabList(list){
+  if(!list)return;
+  list.innerHTML='';
+  var emps=DATA.employees;
+  var q=staffQ.toLowerCase().trim();
+  if(q)emps=emps.filter(function(e){return e.name.toLowerCase().indexOf(q)>=0||e.pos.toLowerCase().indexOf(q)>=0||e.badge.indexOf(q)>=0||e.phone.indexOf(q)>=0||(e.ext&&e.ext.indexOf(q)>=0)});
+  if(emps.length===0){list.appendChild(h('div',{class:'empty'},'Никого не найдено'));return}
+  emps.forEach(function(e){list.appendChild(staffCard(e))});
+}
+function openEmployee(e){state.page='employee:'+e.id;saveState();render()}
+function renderEmployeePage(container,id){
+  var e=DATA.employees.find(function(x){return x.id===id});
+  if(!e)return;
+  var pg=h('div',{class:'page on'});
+  pg.appendChild(mkNav(e.name.split(' ')[0]));
+  var body=h('div',{class:'pg-body'});
+  body.appendChild(h('div',{class:'card',style:{padding:'20px',textAlign:'center'}},
+    h('div',{class:'ava lg '+e.avatar,style:{margin:'0 auto 12px'}},initials(e.name)),
+    h('h3',{style:{fontSize:'20px',fontWeight:'700',marginBottom:'4px'}},e.name),
+    h('div',{class:'txt-sm cl-m'},e.pos),
+    h('div',{class:'txt-xs cl-m mt'},e.dept+' · таб. '+e.badge)
+  ));
+  body.appendChild(h('div',{style:{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:'8px',margin:'14px 0'}},
+    actionCard('📞','Позвонить',function(){startCall(e)}),
+    actionCard('🎥','ВКС',function(){joinVCS(e)}),
+    actionCard('💬','Чат',function(){startDMChat(e)}),
+    actionCard('📋','Задача',function(){state.tab='tasks';saveState();openNewTask()}),
+    actionCard('👍','Спасибо',function(){e.points=(e.points||0)+5;saveState();showIsland('👍 Спасибо! +5 баллов','🎉','g');vib([30,30,30])}),
+    actionCard('🩺','Медосмотр',function(){showMedDetail(e)})
+  ));
+  body.appendChild(h('div',{class:'gtitle'},'Контакты'));
+  body.appendChild(h('div',{class:'card'},
+    infoRow('Мобильный',h('a',{href:'tel:'+e.phone,style:{color:'var(--blue)'}},e.phone)),
+    infoRow('Внутренний','📞 '+e.ext),
+    infoRow('Email',h('a',{href:'mailto:'+e.email,style:{color:'var(--blue)'}},e.email)),
+    infoRow('Табельный',e.badge)
+  ));
+  pg.appendChild(body);
+  container.appendChild(pg);
+}
+function actionCard(ico,label,onclick){return h('button',{class:'card press',style:{padding:'14px 8px',textAlign:'center'},onclick:onclick},h('div',{style:{fontSize:'24px',marginBottom:'4px'}},ico),h('div',{class:'txt-xs bld'},label))}
+function infoRow(label,val){return h('div',{class:'grow'},h('span',{class:'cl-m txt-sm'},label),h('div',{class:'gap'}),typeof val==='string'?h('b',{},val):val)}
+// ===== ВСЕ ФУНКЦИИ =====
+function openAllFeatures(){state.page='allfeatures';saveState();render()}
+function renderAllFeatures(container){
+  var pg=h('div',{class:'page on'});
+  pg.appendChild(mkNav('Все функции'));
+  var body=h('div',{class:'pg-body'});
+  var feats=[
+    {ico:'🤖',label:'ИИ-ассистент',desc:'Голос, память',cls:'b1',act:openAIChat},
+    {ico:'📈',label:'Прогнозы ИИ',desc:'Предиктивные поломки',cls:'b4',act:openPredict},
+    {ico:'⛓',label:'Автономия ИИ',desc:'Цепочки действий',cls:'b4',act:openChains},
+    {ico:'💬',label:'Новый чат',desc:'Личный или группа',cls:'b3',act:openNewChat},
+    {ico:'🔍',label:'Глоб. поиск',desc:'По всему заводу',cls:'b5',act:openGlobalSearch},
+    {ico:'🔔',label:'Уведомления',desc:'Центр и настройки',cls:'b6',act:openNotifCenter},
+    {ico:'🎥',label:'ВКС',desc:'Видеоконференции',cls:'b2',act:function(){state.page='vcs-lobby';saveState();render()}},
+    {ico:'📋',label:'Задачи',desc:'С чек-листами',cls:'b5',act:function(){state.tab='tasks';saveState();closePage()}},
+    {ico:'👥',label:'Штат',desc:'Поиск сотрудников',cls:'b5',act:function(){state.tab='staff';saveState();closePage()}},
+    {ico:'🏭',label:'Производство',desc:'Цех и телеметрия',cls:'b6',act:function(){state.tab='prod';saveState();closePage()}},
+    {ico:'📖',label:'Формуляры',desc:'Паспорта изделий',cls:'b5',act:openFormulas},
+    {ico:'⚡',label:'Наряд-допуски',desc:'Опасные работы',cls:'b6',act:openPermits},
+    {ico:'🔄',label:'Передача смены',desc:'С подписью',cls:'b3',act:openShift},
+    {ico:'📦',label:'Склад',desc:'Остатки и заявки',cls:'b6',act:openWarehouse},
+    {ico:'💡',label:'Ящик идей',desc:'С голосованием',cls:'b4',act:openIdeas},
+    {ico:'🏅',label:'Рейтинг',desc:'Награды и баллы',cls:'b6',act:openRating},
+    {ico:'🩺',label:'Медосмотры',desc:'Сроки и статусы',cls:'b3',act:openMed},
+    {ico:'🛡',label:'Безопасность',desc:'ОТ, СИЗ, инциденты',cls:'b2',act:openSafety},
+    {ico:'📰',label:'Газета завода',desc:'Новости и статьи',cls:'b4',act:openNews},
+    {ico:'📅',label:'Календарь',desc:'Смены и события',cls:'b6',act:openCalendar},
+    {ico:'📊',label:'Экспорт',desc:'Отчёты CSV',cls:'b5',act:openExport},
+    {ico:'🔐',label:'PIN и Face ID',desc:'Безопасность',cls:'b2',act:function(){state.page='pinsetup';saveState();render()}},
+    {ico:'⚙️',label:'Кабинет',desc:'Профиль',cls:'b5',act:function(){state.tab='profile';saveState();closePage()}}
+  ];
+  if(isDirector())feats.unshift({ico:'🛡',label:'Админ-панель',desc:'Только директор',cls:'b2',act:openAdmin});
+  var grid=h('div',{class:'feat-grid'});
+  feats.forEach(function(f){
+    grid.appendChild(h('button',{class:'feat-card press',onclick:f.act},
+      h('div',{class:'fi ava '+f.cls,style:{borderRadius:'12px'}},f.ico),
+      h('b',{},f.label),
+      h('small',{},f.desc)
+    ));
+  });
+  body.appendChild(grid);
+  body.appendChild(h('div',{class:'txt-c cl-gr txt-xs mt'},'КМ·Инженер v8.1 · все модули в одном месте'));
+  pg.appendChild(body);
+  container.appendChild(pg);
+}
+function openFormulas(){state.page='formulas';saveState();render()}
+function renderFormulas(container){
+  var pg=h('div',{class:'page on'});
+  pg.appendChild(mkNav('Формуляры изделий'));
+  var body=h('div',{class:'pg-body'});
+  DATA.products.forEach(function(p){
+    body.appendChild(h('button',{class:'card press',style:{padding:'16px',display:'flex',gap:'12px',alignItems:'center',width:'100%',textAlign:'left'},onclick:function(){openFormula(p.id)}},
+      h('div',{style:{width:'42px',height:'42px',borderRadius:'12px',background:'var(--card2)',display:'grid',placeItems:'center',fontSize:'20px'}},'⚙️'),
+      h('div',{style:{flex:'1'}},h('b',{style:{fontSize:'15px',display:'block'}},p.name+' · '+p.serial),h('small',{class:'cl-m'},p.type+' · операций: '+p.ops.length)),
+      h('span',{style:{color:'var(--gray)'}},'›')
+    ));
+  });
+  pg.appendChild(body);
+  container.appendChild(pg);
+}
+// ===== MED / SAFETY / NEWS / CALENDAR =====
+function openMed(){state.page='med';saveState();render()}
+function medStatus(emp){
+  var days=Math.floor((now()-new Date(emp.med))/(24*3600000));
+  if(days>365)return{s:'overdue',label:'Просрочен',cls:'tg-r'};
+  if(days>300)return{s:'soon',label:'Скоро',cls:'tg-o'};
+  return{s:'ok',label:'Пройден',cls:'tg-g'};
+}
+function renderMed(container){
+  var pg=h('div',{class:'page on'});
+  pg.appendChild(mkNav('Медосмотры'));
+  var body=h('div',{class:'pg-body'});
+  var over=DATA.employees.filter(function(e){return medStatus(e).s==='overdue'}).length;
+  var soon=DATA.employees.filter(function(e){return medStatus(e).s==='soon'}).length;
+  body.appendChild(h('div',{class:'stat-row'},
+    h('div',{class:'stat'},h('small',{},'Просрочено'),h('b',{class:'cl-r'},over)),
+    h('div',{class:'stat'},h('small',{},'Подходят сроки'),h('b',{class:'cl-o'},soon))
+  ));
+  body.appendChild(h('div',{class:'gtitle'},'Сотрудники'));
+  DATA.employees.forEach(function(e){
+    var st=medStatus(e);
+    body.appendChild(h('div',{class:'scard press',onclick:function(){showMedDetail(e)}},
+      h('div',{class:'ava '+e.avatar},initials(e.name)),
+      h('div',{style:{flex:'1'}},h('b',{},e.name),h('small',{},'Последний: '+fmtDate(e.med))),
+      h('span',{class:'tag '+st.cls},st.label)
+    ));
+  });
+  pg.appendChild(body);
+  container.appendChild(pg);
+}
+function showMedDetail(e){
+  var st=medStatus(e);
+  showSheet(h('div',{},
+    h('div',{class:'row between mb'},h('b',{},e.name),h('span',{class:'tag '+st.cls},st.label)),
+    h('div',{class:'txt-sm cl-m'},'Подразделение: '+e.dept),
+    h('div',{class:'txt-sm cl-m'},'Последний медосмотр: '+fmtDate(e.med)),
+    h('div',{class:'txt-sm cl-m mt'},'Периодические медосмотры проводятся 1 раз в год.')
+  ),'Медосмотр');
+}
+function openSafety(){state.page='safety';saveState();render()}
+function renderSafety(container){
+  var pg=h('div',{class:'page on'});
+  pg.appendChild(mkNav('Безопасность'));
+  var body=h('div',{class:'pg-body'});
+  body.appendChild(h('div',{class:'hero',style:{background:'linear-gradient(140deg,#35d07f,#1a8f52)'}},
+    h('div',{class:'live'},h('i'),'ОХРАНА ТРУДА'),
+    h('h3',{},'0 инцидентов'),
+    h('p',{},'Дней без происшествий: 47')
+  ));
+  body.appendChild(h('div',{class:'card'},
+    h('div',{class:'grow press',onclick:function(){signSheet('Вводный инструктаж','Подпись инструктируемого об ознакомлении с правилами ОТ.',function(){showIsland('Инструктаж проведён','🛡','g')})}},h('div',{class:'ava sm b1'},'📋'),h('div',{style:{flex:'1'}},h('b',{style:{fontSize:'14px'}},'Вводный инструктаж'),h('small',{class:'cl-m'},'С электронной подписью')),h('span',{class:'tag tg-b'},'Провести')),
+    h('div',{class:'grow press',onclick:openPermits},h('div',{class:'ava sm b3'},'⚡'),h('div',{style:{flex:'1'}},h('b',{style:{fontSize:'14px'}},'Наряд-допуски'),h('small',{class:'cl-m'},'Опасные работы')),h('span',{style:{color:'var(--gray)'}},'›')),
+    h('div',{class:'grow press',onclick:openShift},h('div',{class:'ava sm b4'},'🔄'),h('div',{style:{flex:'1'}},h('b',{style:{fontSize:'14px'}},'Передача смены'),h('small',{class:'cl-m'},'Чек-лист и подпись')),h('span',{style:{color:'var(--gray)'}},'›'))
+  ));
+  body.appendChild(h('div',{class:'gtitle'},'СИЗ'));
+  var sizCard=h('div',{class:'card',style:{padding:'14px'}});
+  [['🪖','Каска защитная','до 12.2026','tg-g'],['🥽','Очки защитные','до 09.2026','tg-g'],['🧤','Перчатки диэлектрические','заменить','tg-r'],['🦺','Жилет сигнальный','до 03.2027','tg-g']].forEach(function(x){
+    sizCard.appendChild(h('div',{class:'row between',style:{padding:'8px 0',borderBottom:'1px solid var(--sep)'}},h('span',{},x[0]+' '+x[1]),h('span',{class:'tag '+x[3]},x[2])));
+  });
+  body.appendChild(sizCard);
+  body.appendChild(h('button',{class:'btn b full press mt',onclick:function(){showIsland('Сообщение принято','🛡','g')}},'🚨 Сообщить об инциденте'));
+  pg.appendChild(body);
+  container.appendChild(pg);
+}
+function openNews(){state.page='news';saveState();render()}
+function renderNews(container){
+  var pg=h('div',{class:'page on'});
+  pg.appendChild(mkNav('Газета завода'));
+  var body=h('div',{class:'pg-body'});
+  body.appendChild(h('div',{class:'hero',style:{background:'linear-gradient(140deg,#0a84ff,#0055d4)'}},
+    h('div',{class:'live'},h('i'),'ЗАВОДСКИЕ ВЕСТИ'),
+    h('h3',{},'«Коломенский машиностроитель»'),
+    h('p',{},'Новости предприятия, люди и достижения')
+  ));
+  DATA.news.forEach(function(n){body.appendChild(newsCard(n))});
+  pg.appendChild(body);
+  container.appendChild(pg);
+}
+function newsCard(n){
+  return h('div',{class:'news-card press',onclick:function(){openNewsDetail(n)}},
+    h('div',{class:'news-img',style:{background:'linear-gradient(135deg,rgba(10,132,255,.15),rgba(95,201,245,.1))'}},n.emoji),
+    h('div',{class:'news-body'},h('span',{class:'tag tg-b'},n.cat),h('b',{},n.title),h('p',{},n.text.slice(0,90)+'...'),h('div',{class:'news-meta'},h('span',{},fmtDT(n.date)),h('span',{},'👁 '+n.views)))
+  );
+}
+function openNewsDetail(n){
+  showSheet(h('div',{},
+    h('span',{class:'tag tg-b'},n.cat),
+    h('p',{style:{marginTop:'10px',lineHeight:'1.55',fontSize:'15px'}},n.text),
+    h('div',{class:'news-meta mt'},h('span',{},fmtDT(n.date)),h('span',{},'👁 '+n.views)),
+    h('button',{class:'btn b full press mt',onclick:hideSheet},'Закрыть')
+  ),n.title);
+}
+function openCalendar(){state.page='calendar';saveState();render()}
+function renderCalendar(container){
+  var pg=h('div',{class:'page on'});
+  pg.appendChild(mkNav('Календарь'));
+  var body=h('div',{class:'pg-body'});
+  if(!state.calMonth){var d=now();state.calMonth={y:d.getFullYear(),m:d.getMonth()}}
+  var cm=state.calMonth;
+  var monthName=new Date(cm.y,cm.m,1).toLocaleDateString('ru-RU',{month:'long',year:'numeric'});
+  body.appendChild(h('div',{class:'cal-head'},
+    h('button',{class:'press',onclick:function(){cm.m--;if(cm.m<0){cm.m=11;cm.y--}saveState();render()}},'‹'),
+    h('b',{},monthName),
+    h('button',{class:'press',onclick:function(){cm.m++;if(cm.m>11){cm.m=0;cm.y++}saveState();render()}},'›')
+  ));
+  var grid=h('div',{class:'cal-grid'});
+  ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'].forEach(function(d){grid.appendChild(h('div',{class:'cal-dow'},d))});
+  var first=new Date(cm.y,cm.m,1);
+  var startDow=(first.getDay()+6)%7;
+  var daysInMonth=new Date(cm.y,cm.m+1,0).getDate();
+  var prevDays=new Date(cm.y,cm.m,0).getDate();
+  var today=now();
+  for(var i=0;i<startDow;i++)grid.appendChild(h('div',{class:'cal-day other'},String(prevDays-startDow+1+i)));
+  for(var dd=1;dd<=daysInMonth;dd++){
+    (function(day){
+      var isToday=day===today.getDate()&&cm.m===today.getMonth()&&cm.y===today.getFullYear();
+      var isSel=state.calSel&&state.calSel.d===day&&state.calSel.m===cm.m&&state.calSel.y===cm.y;
+      grid.appendChild(h('button',{class:'cal-day'+(isToday?' today':'')+(isSel?' sel':''),onclick:function(){state.calSel={d:day,m:cm.m,y:cm.y};saveState();render()}},String(day)));
+    })(dd);
+  }
+  body.appendChild(grid);
+  body.appendChild(h('div',{class:'gtitle'},'События'));
+  var evs=[{ico:'🏭',t:'Рабочая смена 08:00–20:00',s:'Цех №3'}];
+  if(state.calSel){
+    state.tasksData.forEach(function(t){
+      var tdd=new Date(t.due);
+      if(tdd.getDate()===state.calSel.d&&tdd.getMonth()===state.calSel.m)evs.push({ico:'📋',t:'Дедлайн: '+t.title,s:t.id});
+    });
+  }else evs.push({ico:'💡',t:'Выберите день',s:'чтобы увидеть события'});
+  evs.forEach(function(ev){
+    body.appendChild(h('div',{class:'card',style:{padding:'12px',display:'flex',gap:'10px',alignItems:'center'}},
+      h('div',{style:{fontSize:'20px'}},ev.ico),
+      h('div',{},h('b',{style:{fontSize:'14px'}},ev.t),h('small',{class:'cl-m',style:{display:'block'}},ev.s))
+    ));
+  });
+  pg.appendChild(body);
+  container.appendChild(pg);
+}
+// ===== PROD =====
+var prodSection='telemetry';
+function renderProd(view){
+  view.appendChild(h('div',{class:'large-title'},'Производство'));
+  var sections=[
+    {id:'telemetry',label:'📡 Телеметрия'},
+    {id:'downtime',label:'📉 Простои'},
+    {id:'products',label:'⚙️ Изделия'},
+    {id:'director',label:'🎯 Директор'}
+  ];
+  var chips=h('div',{class:'hscroll',style:{marginBottom:'14px'}});
+  sections.forEach(function(s){
+    if(s.id==='director'&&!isDirector())return;
+    chips.appendChild(h('button',{class:'chip press'+(prodSection===s.id?' on':''),onclick:function(){prodSection=s.id;render()}},s.label));
+  });
+  view.appendChild(chips);
+  if(prodSection==='telemetry')renderTelemetry(view);
+  else if(prodSection==='downtime')renderDowntime(view);
+  else if(prodSection==='products')renderProducts(view);
+  else if(prodSection==='director')renderDirectorPanel(view);
+}
+function renderTelemetry(view){
+  view.appendChild(h('div',{class:'gtitle row between'},h('span',{},'📡 Телеметрия'),h('span',{class:'txt-xs cl-g'},'● LIVE')));
+  for(var k in state.telemetry){
+    var v=state.telemetry[k];
+    var stCls=v.status==='ok'?'g':'w';
+    var card=h('div',{class:'telem-card'});
+    card.appendChild(h('div',{class:'hd'},h('div',{class:'ld '+stCls}),h('b',{},v.name),h('small',{},k)));
+    card.appendChild(h('div',{class:'telem-row'},
+      h('div',{class:'telem-m'},h('small',{},'ТЕМП'),h('b',{class:v.temp>70?'cl-r':v.temp>50?'cl-o':'cl-g'},v.temp+'°C')),
+      h('div',{class:'telem-m'},h('small',{},'НАГРУЗ'),h('b',{class:'cl-b'},v.load+'%')),
+      h('div',{class:'telem-m'},h('small',{},'СТАТУС'),h('b',{},v.status==='ok'?'OK':'ВНИМ'))
+    ));
+    card.appendChild(h('svg',{class:'spark',viewBox:'0 0 120 30',preserveAspectRatio:'none'},buildSpark(v.history)));
+    if(v.status==='warn')card.appendChild(h('div',{class:'alert'},'⚠️ Превышение температуры'));
+    view.appendChild(card);
+  }
+  view.appendChild(h('button',{class:'btn b full press mt',onclick:openPredict},'📈 Открыть прогноз ИИ'));
+}
+function buildSpark(data){
+  if(!data||data.length===0)return[];
+  var min=Math.min.apply(null,data),max=Math.max.apply(null,data),range=(max-min)||1;
+  var pts=data.map(function(v,i){return[(i/(data.length-1))*120,30-((v-min)/range)*26-2]});
+  var line=pts.map(function(p){return p[0].toFixed(1)+','+p[1].toFixed(1)}).join(' ');
+  return[h('polyline',{points:line,fill:'none',stroke:'#0a84ff','stroke-width':'1.5'})];
+}
+function renderDowntime(view){
+  var totalDur=DATA.downtime.reduce(function(s,d){return s+d.dur},0);
+  var totalCost=DATA.downtime.reduce(function(s,d){return s+d.cost},0);
+  view.appendChild(h('div',{class:'stat-row'},
+    h('div',{class:'stat'},h('small',{},'Всего простоев'),h('b',{},(totalDur/60).toFixed(1),h('em',{},' ч'))),
+    h('div',{class:'stat'},h('small',{},'Потери'),h('b',{class:'cl-r'},(totalCost/1000).toFixed(0),h('em',{},' тыс.₽')))
+  ));
+  view.appendChild(h('div',{class:'gtitle'},'Журнал простоев'));
+  DATA.downtime.forEach(function(d){
+    view.appendChild(h('div',{class:'card',style:{padding:'14px'}},
+      h('div',{class:'row between'},h('b',{},d.line+' · '+d.cause),h('span',{class:'tag tg-o'},d.type)),
+      h('div',{class:'txt-sm cl-m mt'},fmtDur(d.dur)+' · потери: '+(d.cost>0?(d.cost/1000).toFixed(0)+' тыс.₽':'—'))
+    ));
+  });
+  view.appendChild(h('button',{class:'btn b full press mt',onclick:function(){exportReport('downtime')}},'📊 Экспорт отчёта по простоям'));
+}
+function renderProducts(view){
+  view.appendChild(h('div',{class:'gtitle'},'⚙️ Изделия завода'));
+  DATA.products.forEach(function(p){
+    view.appendChild(h('div',{class:'card press',style:{padding:'16px'},onclick:function(){openFormula(p.id)}},
+      h('div',{class:'row between mb'},h('b',{class:'disp',style:{fontSize:'20px'}},p.name),h('span',{class:'tag tg-c'},p.type)),
+      h('div',{class:'txt-sm cl-m'},'Мощность: '+p.power+' · серийник '+p.serial),
+      h('div',{class:'txt-sm cl-m mt'},p.desc.slice(0,100)+'...'),
+      h('button',{class:'btn sm b press mt',onclick:function(e){e.stopPropagation();openFormula(p.id)}},'📖 Открыть формуляр')
+    ));
+  });
+}
+function renderDirectorPanel(view){
+  view.appendChild(h('div',{class:'gtitle'},'🎯 Панель директора'));
+  view.appendChild(h('div',{class:'hero',style:{background:'linear-gradient(140deg,#0a84ff,#0055d4)'}},
+    h('div',{class:'live'},h('i'),'ФИНАНСОВЫЙ КОНТРОЛЬ'),
+    h('h3',{},'Выручка за август'),
+    h('p',{style:{fontSize:'32px',fontFamily:'Russo One',marginTop:'10px'}},'₽ '+state.kpi.revenue+' млн'),
+    h('p',{style:{marginTop:'8px'}},'+12.4% к плану')
+  ));
+  view.appendChild(h('div',{class:'stat-row'},
+    h('div',{class:'stat'},h('small',{},'Себестоимость'),h('b',{},'612',h('em',{},'млн'))),
+    h('div',{class:'stat'},h('small',{},'Прибыль'),h('b',{},'235',h('em',{},'млн')))
+  ));
+  view.appendChild(h('div',{class:'gtitle'},'Требуют визы директора'));
+  var approvals=[
+    {t:'Закупка металла на 12 млн ₽',from:'Григорьева Н.О.'},
+    {t:'Командировка в Электросталь',from:'Беляев Д.А.'},
+    {t:'Премия бригаде №3',from:'Воронцов А.М.'}
+  ];
+  approvals.forEach(function(v){
+    view.appendChild(h('div',{class:'card',style:{padding:'14px'}},
+      h('b',{},v.t),
+      h('div',{class:'txt-sm cl-m mt'},'От: '+v.from),
+      h('div',{class:'row mt',style:{gap:'6px'}},
+        h('button',{class:'btn sm',style:{background:'var(--green)',color:'#fff'},onclick:function(){signSheet('Виза директора','Подпись под документом: '+v.t,function(){showIsland('Виза поставлена ✍️','✅','g')})}},'✍️ Подписать'),
+        h('button',{class:'btn sm card',onclick:function(){showIsland('Отклонено','❌','o')}},'✗ Отклонить')
+      )
+    ));
+  });
+  view.appendChild(h('button',{class:'btn b full press mt',onclick:openAdmin},'🛡 Админ-панель'));
+  view.appendChild(h('button',{class:'btn card full press mt',onclick:function(){exportReport('kpi')}},'📊 Экспорт KPI'));
+}
+// ===== PROFILE =====
+function renderProfile(view){
+  var u=state.demoMode||state.user;
+  view.appendChild(h('div',{class:'large-title'},'Кабинет'));
+  view.appendChild(h('div',{class:'card',style:{padding:'20px',textAlign:'center'}},
+    h('div',{class:'ava lg '+u.avatar,style:{margin:'0 auto 12px'}},initials(u.name)),
+    h('h3',{class:'disp',style:{fontSize:'20px',marginBottom:'4px'}},u.name),
+    h('div',{class:'txt-sm cl-m'},u.pos),
+    h('div',{class:'txt-xs cl-m mt'},u.dept+' · таб. '+u.badge),
+    h('div',{class:'tag tg-b',style:{marginTop:'10px'}},ROLE_PERMS[u.role]?ROLE_PERMS[u.role].name:u.role),
+    h('div',{class:'txt-sm cl-m mt'},'🏅 '+u.points+' баллов')
+  ));
+  var lvl=aiLevel();
+  view.appendChild(h('div',{class:'gtitle'},'🧠 Память ИИ'));
+  view.appendChild(h('div',{class:'card',style:{padding:'16px'}},
+    h('div',{class:'row between'},h('b',{},lvl.t),h('span',{class:'tag tg-b'},'Уровень '+lvl.n)),
+    h('div',{class:'progress'},h('i',{style:{width:(lvl.next?clamp(state.aiMem.xp/lvl.next*100,5,100):100)+'%'}})),
+    h('div',{class:'txt-xs cl-m'},'Опыт: '+state.aiMem.xp+' XP · Запросов: '+state.aiMem.queries)
+  ));
+  view.appendChild(h('div',{class:'gtitle'},'🔐 Безопасность'));
+  view.appendChild(h('div',{class:'card',style:{padding:'14px'}},
+    h('div',{class:'row between'},h('div',{style:{flex:'1'}},h('b',{style:{fontSize:'14px'}},'🔐 PIN-код'),h('small',{class:'cl-m'},state.pinEnabled?'Включён':'Выключен')),h('button',{class:'btn sm b press',onclick:function(){state.page='pinsetup';saveState();render()}},'Настроить'))
+  ));
+  view.appendChild(h('div',{class:'gtitle'},'🏆 Достижения'));
+  view.appendChild(h('div',{class:'badges'},
+    h('div',{class:'badge'},h('i',{},'🥇'),'5 лет на заводе'),
+    h('div',{class:'badge'},h('i',{},'⭐'),'Мастер года'),
+    h('div',{class:'badge'},h('i',{},'🎯'),'0 просрочек')
+  ));
+  view.appendChild(h('button',{class:'btn b full press mt',onclick:openRating},'🏅 Открыть рейтинг'));
+  view.appendChild(h('div',{class:'gtitle'},'📅 График смен'));
+  var week=h('div',{class:'week'});
+  ['ПН','ВТ','СР','ЧТ','ПТ','СБ','ВС'].forEach(function(d,i){
+    week.appendChild(h('div',{class:'wd'+(i<5?' sh':'')},h('div',{},d),h('b',{},i<5?'Д':'—')));
+  });
+  view.appendChild(week);
+  if(isDirector()&&!state.demoMode){
+    view.appendChild(h('div',{class:'gtitle'},'🎭 Посмотреть глазами должности'));
+    var sel=h('div',{class:'card',style:{padding:'4px'}});
+    ['deputy','chiefeng','engineer','master','otk','dispatcher','operator'].forEach(function(r){
+      var rd=ROLE_PERMS[r];
+      var is=state.demoMode&&state.demoMode.role===r;
+      sel.appendChild(h('button',{class:'grow press',onclick:function(){
+        if(is){state.demoMode=null}else{state.demoMode=DATA.employees.find(function(e){return e.role===r})}
+        saveState();render();
+        showIsland(state.demoMode?'Режим: '+rd.name:'Свой кабинет','👤','b');
+      }},
+        h('div',{class:'ava sm '+(DATA.employees.find(function(e){return e.role===r})||{}).avatar||'gray'},rd.name[0]),
+        h('div',{style:{flex:'1',textAlign:'left'}},h('b',{},rd.name),h('small',{class:'cl-m'},'Переключить')),
+        is?h('span',{class:'tag tg-g'},'✓ Сейчас'):null
+      ));
+    });
+    view.appendChild(sel);
+  }
+  view.appendChild(h('div',{class:'gtitle'},'⚙️ Настройки'));
+  var settings=h('div',{class:'card'});
+  settings.appendChild(settingRow('🌓 Тема',settingTheme()));
+  settings.appendChild(settingRow('🤖 Автономный ИИ',settingToggle(state.aiAutonomy,function(v){state.aiAutonomy=v;saveState();showIsland(v?'Автономный режим вкл':'Автономный режим выкл','🤖','b')})));
+  view.appendChild(settings);
+  view.appendChild(h('div',{class:'gtitle'},'Действия'));
+  view.appendChild(h('button',{class:'btn card full press mb',onclick:function(){state.user=null;state.demoMode=null;saveState();render()}},'Выйти из аккаунта'));
+  view.appendChild(h('div',{class:'txt-c cl-gr txt-xs',style:{padding:'20px 0'}},'КМ·Инженер v8.1 · АО «Коломенский завод»'));
+}
+function settingRow(label,right){return h('div',{class:'grow'},h('span',{},label),h('div',{class:'gap'}),right)}
+function settingTheme(){
+  var wrap=h('div',{class:'seg',style:{margin:'0',width:'auto'}});
+  ['auto','light','dark'].forEach(function(t){
+    wrap.appendChild(h('button',{class:state.theme===t?'on':'',style:{padding:'5px 10px',fontSize:'11px',width:'auto',flex:'none'},onclick:function(){state.theme=t;saveState();applyTheme();render()}},t==='auto'?'Авто':t==='light'?'☀':'🌙'));
+  });
+  return wrap;
+}
+function settingToggle(val,onchange){return h('button',{class:'tgl'+(val?' on':''),onclick:function(e){e.target.classList.toggle('on');onchange(e.target.classList.contains('on'))}})}
+function renderPinSetup(container){
+  var pg=h('div',{class:'page on'});
+  pg.appendChild(mkNav('Безопасность'));
+  var body=h('div',{class:'pg-body'});
+  body.appendChild(h('div',{class:'card'},
+    h('div',{class:'grow'},h('div',{style:{flex:'1'}},h('b',{style:{fontSize:'14px'}},'🔐 PIN-код'),h('small',{class:'cl-m'},'Блокировка приложения')),h('button',{class:'tgl'+(state.pinEnabled?' on':''),onclick:function(e){
+      if(!state.pinEnabled&&!state.pin){
+        var p=String(Math.floor(1000+Math.random()*9000));
+        state.pin=p;state.pinEnabled=true;
+        e.target.classList.add('on');
+        saveState();
+        showIsland('PIN установлен: '+p+' (демо)','🔐','b',4000);
+      }else{
+        state.pinEnabled=!state.pinEnabled;
+        e.target.classList.toggle('on');
+        saveState();
+        showIsland(state.pinEnabled?'PIN включён':'PIN выключен','🔐','b');
+      }
+    }})),
+    h('div',{class:'grow'},h('div',{style:{flex:'1'}},h('b',{style:{fontSize:'14px'}},'🧑 Face ID / биометрия'),h('small',{class:'cl-m'},'Проверка доступности')),h('button',{class:'btn sm b press',onclick:tryFaceID},'Проверить'))
+  ));
+  body.appendChild(h('div',{class:'txt-xs cl-gr mt'},'При сворачивании приложения более чем на 30 секунд потребуется разблокировка.'));
+  pg.appendChild(body);
+  container.appendChild(pg);
+}
+// ===== AI =====
+var aiMessages=[];
+function openAIChat(){
+  state.page='ai';
+  if(aiMessages.length===0){
+    var lvl=aiLevel();
+    aiMessages.push({id:uid(),from:'ai',time:now(),text:'Здравствуйте, '+(state.aiMem.name||state.user.name.split(' ')[1])+'! Я — ИИ-ассистент уровня «'+lvl.t+'». Умею предсказывать поломки, запускать автономные цепочки и запоминать. Чем помочь?',trace:null});
+  }
+  saveState();render();
+}
+function renderAIChat(container){
+  var pg=h('div',{class:'page on'});
+  pg.appendChild(mkNav('ИИ-ассистент'));
+  var lvl=aiLevel();
+  pg.appendChild(h('div',{class:'card',style:{padding:'14px',display:'flex',gap:'12px',alignItems:'center'}},
+    h('div',{class:'ava',style:{background:'linear-gradient(150deg,#5fc9f5,#0a84ff)',width:'54px',height:'54px',fontSize:'22px'}},'🤖'),
+    h('div',{style:{flex:'1'}},h('b',{style:{fontSize:'16px',display:'block'}},'ИИ-Диспетчер'),h('small',{class:'cl-m'},lvl.t+' · '+state.aiMem.xp+' XP'))
+  ));
+  var msgs=h('div',{class:'chat-msgs',id:'aiMsgs',style:{flex:'1'}});
+  renderAIMessages(msgs);
+  pg.appendChild(msgs);
+  var chips=h('div',{style:{display:'flex',gap:'6px',overflowX:'auto',padding:'6px 14px',borderTop:'1px solid var(--sep)'}});
+  ['Сводка','Прогноз поломок','Запусти цепочку','Позвони Беляеву','Что ты знаешь обо мне?'].forEach(function(q){
+    chips.appendChild(h('button',{class:'chip press',onclick:function(){sendAI(q)}},q));
+  });
+  pg.appendChild(chips);
+  pg.appendChild(h('div',{class:'chat-input'},
+    h('textarea',{class:'inp',rows:'1',placeholder:'Спросите ИИ…',dataset:{id:'aiInput'}}),
+    h('button',{class:'send press',onclick:function(){sendAI()}},h('svg',{viewBox:'0 0 24 24'},h('path',{d:'M22 2L11 13M22 2l-7 20-4-9-9-4z'})))
+  ));
+  container.appendChild(pg);
+  setTimeout(function(){var m=$('#aiMsgs');if(m)m.scrollTop=m.scrollHeight},50);
+}
+function renderAIMessages(container){
+  container.innerHTML='';
+  aiMessages.forEach(function(m){
+    var row=h('div',{class:'mrow'+(m.from==='ai'?'':' me')});
+    var bub=h('div',{class:'bub'+(m.from==='ai'?' them':' me')});
+    if(m.from==='ai'){
+      if(m.trace){
+        var tr=h('details',{class:'trace'},h('summary',{},'⛓ Пайплайн ('+m.trace.length+' шагов)'));
+        var steps=h('div',{style:{padding:'8px 11px',fontSize:'11px',fontFamily:'ui-monospace,monospace',color:'var(--label3)'}});
+        m.trace.forEach(function(s){steps.appendChild(h('div',{},s))});
+        tr.appendChild(steps);
+        bub.appendChild(tr);
+      }
+      if(m.html){var wrap=h('div',{});wrap.innerHTML=m.html;bub.appendChild(wrap)}
+      else if(m.text)bub.appendChild(h('div',{style:{whiteSpace:'pre-wrap'}},m.text));
+    }else{
+      bub.appendChild(h('span',{},m.text));
+    }
+    bub.appendChild(h('span',{class:'tm'},fmtTime(m.time)));
+    row.appendChild(bub);
+    container.appendChild(row);
+  });
+}
+function sendAI(text){
+  var inp=$('[data-id="aiInput"]');
+  if(inp&&!text){text=inp.value.trim();if(!text)return;inp.value=''}
+  if(!text)return;
+  aiMessages.push({id:uid(),from:'user',time:now(),text:text});
+  aiLearn();
+  saveState();
+  renderAIMessages($('#aiMsgs'));
+  var typing=h('div',{class:'mrow'});
+  typing.appendChild(h('div',{class:'bub them'},'● ● ●'));
+  var m=$('#aiMsgs');
+  if(m){m.appendChild(typing);m.scrollTop=m.scrollHeight}
+  setTimeout(function(){
+    typing.remove();
+    var response=aiProcess(text);
+    aiMessages.push({id:uid(),from:'ai',time:now(),text:response.text,html:response.html,trace:response.trace});
+    saveState();
+    renderAIMessages($('#aiMsgs'));
+    var m2=$('#aiMsgs');
+    if(m2)m2.scrollTop=m2.scrollHeight;
+    vib(15);
+  },800);
+}
+function aiProcess(query){
+  var q=query.toLowerCase(),trace=[],result={text:null,html:null,trace:null};
+  trace.push('ORCH → intent='+classifyIntent(q));
+  trace.push('MEM → память: '+state.aiMem.facts.length+' фактов · '+state.aiMem.xp+' XP');
+  trace.push('RAG → поиск в базе знаний');
+  trace.push('TOOL → выбор инструмента');
+  trace.push('LLM → генерация ответа');
+  result.trace=trace;
+  var intent=classifyIntent(q);
+  if(intent==='memory'){
+    var nameMatch=query.match(/меня зовут\s+([а-яА-ЯёЁ]+)/i);
+    if(nameMatch){state.aiMem.name=nameMatch[1];saveState();result.html='<b style="color:var(--green)">✓ Запомнил</b><br>Теперь я знаю, что вас зовут <b>'+state.aiMem.name+'</b>.';return result}
+    var factMatch=query.match(/запомни[:,]?\s+(.+)/i);
+    if(factMatch){state.aiMem.facts.push(factMatch[1]);if(state.aiMem.facts.length>20)state.aiMem.facts.shift();saveState();result.html='<b style="color:var(--green)">✓ Записал в память</b><br>«'+factMatch[1]+'» — запомнено.';return result}
+    if(q.indexOf('что ты знаешь')>=0||q.indexOf('память')>=0){
+      var facts=state.aiMem.facts.length>0?'<ul style="margin:6px 0 0 18px">'+state.aiMem.facts.map(function(f){return'<li>'+f+'</li>'}).join('')+'</ul>':'<p style="opacity:.6">Пока нет сохранённых фактов. Скажите: «запомни, что...»</p>';
+      result.html='<b>🧠 Моя память</b><br>Имя: <b>'+(state.aiMem.name||'не задано')+'</b><br>Фактов: <b>'+state.aiMem.facts.length+'</b><br>Запросов: <b>'+state.aiMem.queries+'</b>'+facts;
+      return result;
+    }
+    result.html='Я умею запоминать. Скажите: «меня зовут ...» или «запомни, что ...».';
+    return result;
+  }
+  if(intent==='predict'){
+    genPredictions();
+    setTimeout(function(){state.page='predict';saveState();render()},700);
+    var top=DATA.predictions[0];
+    result.html='<b>📈 Предиктивная аналитика</b><br>'+(top?('Наибольший риск: <b>'+top.line+'</b> — вероятность '+top.prob+'%. '+top.reason):'Все системы в норме.')+'<br>Открываю полный прогноз…';
+    return result;
+  }
+  if(intent==='chain'){
+    runAIChain('Запрошено пользователем: полная диагностика');
+    setTimeout(function(){state.page='chains';saveState();render()},700);
+    result.html='<b>⛓ Запускаю автономную цепочку</b><br>ИИ выполнит: обнаружение аномалий → анализ → создание задач → уведомления → контроль. Открываю журнал…';
+    return result;
+  }
+  if(intent==='call'){
+    var match=findEmployeeInQuery(query);
+    if(match){
+      setTimeout(function(){startCall(match)},600);
+      result.html='<b>📞 Звоню внутри приложения…</b><br>'+match.name+'<br>'+match.pos;
+      return result;
+    }
+    result.html='Уточните, кому позвонить. Например: «Позвони Беляеву».';
+    return result;
+  }
+  if(intent==='digest'){
+    var myOpen=state.tasksData.filter(function(t){return t.executor===state.user.id&&t.stage!=='done'}).length;
+    result.html='<b>📋 Ваш дайджест</b><br>Активных задач: <b>'+myOpen+'</b><br>Непрочитанных: <b>'+countUnread()+'</b><br>Прогнозов ИИ: <b>'+DATA.predictions.length+'</b>';
+    return result;
+  }
+  if(intent==='product'){
+    var p=DATA.products.find(function(p){return q.indexOf(p.name.toLowerCase())>=0});
+    if(p){
+      setTimeout(function(){openFormula(p.id)},1200);
+      result.html='<b>⚙️ '+p.name+'</b><br>'+p.desc+'<br>Открываю формуляр изделия…';
+      return result;
+    }
+    result.html='В линейке: Д49, ТЭМ18ДМ, 2ТЭ25КМ.';
+    return result;
+  }
+  if(intent==='knowledge'){
+    var ragMatches=DATA.knowledgeBase.filter(function(kb){return q.split(/\s+/).some(function(kw){return kw.length>=3&&(kb.title.toLowerCase().indexOf(kw)>=0||kb.text.toLowerCase().indexOf(kw)>=0)})});
+    if(ragMatches.length>0){
+      var main=ragMatches[0];
+      result.html='<b>📖 '+main.title+'</b><br>'+main.text+'<br><small style="opacity:.6">Источник: '+main.src+'</small>';
+      return result;
+    }
+    result.html='В базе знаний нет точного ответа. Уточните изделие (Д49, ТЭМ18ДМ, 2ТЭ25КМ).';
+    return result;
+  }
+  result.html='Я понял запрос. Умею:<br>• 📈 предсказывать поломки<br>• ⛓ запускать автономные цепочки<br>• 📞 звонить коллегам<br>• 🧠 запоминать<br>• 📖 отвечать по регламентам';
+  return result;
+}
+function classifyIntent(q){
+  if(/(меня зовут|запомни|что ты знаешь|память)/.test(q))return'memory';
+  else if(/(прогноз|предскаж|предиктив|поломк|отказ)/.test(q))return'predict';
+  else if(/(цепочк|автоном|запусти)/.test(q))return'chain';
+  else if(/(позвони|набери|звонок)/.test(q))return'call';
+  else if(/(сводк|дайджест|как дел)/.test(q))return'digest';
+  else if(/(регламент|инструкц|ТО|замен|неисправн)/.test(q))return'knowledge';
+  else if(/(д49|тэм18|2тэ25|издели|формуляр)/.test(q))return'product';
+  return'general';
+}
+function findEmployeeInQuery(q){
+  q=q.toLowerCase();
+  for(var i=0;i<DATA.employees.length;i++){
+    var e=DATA.employees[i];
+    var parts=e.name.toLowerCase().split(/\s+/);
+    for(var j=0;j<parts.length;j++){if(parts[j].length>3&&q.indexOf(parts[j])>=0)return e}
+    if(q.indexOf(e.badge)>=0||q.indexOf(e.pos.toLowerCase())>=0)return e;
+  }
+  return null;
+}
+function startAutonomy(){
+  if(autonomyTimer)clearInterval(autonomyTimer);
+  autonomyTimer=setInterval(function(){
+    if(!state.user||!state.aiAutonomy)return;
+    var r=Math.random();
+    if(r<0.25){runAIChain('Аномалия телеметрии: '+Object.keys(state.telemetry)[Math.floor(Math.random()*5)])}
+    else{
+      var pool=[
+        {title:'Просроченная задача',text:'Обнаружена просроченная задача.',icon:'📋'},
+        {title:'Внимание: Л-2',text:'Превышение температуры на сварочном участке.',icon:'⚠️'},
+        {title:'Склад: мало форсунок',text:'Остаток ниже минимума.',icon:'📦'}
+      ];
+      var i=pool[Math.floor(Math.random()*pool.length)];
+      state.aiInsights.push({id:uid(),title:i.title,text:i.text,time:now()});
+      if(state.aiInsights.length>10)state.aiInsights.shift();
+      state.notifs.unshift({id:uid(),icon:i.icon,title:i.title,text:i.text,time:now(),cat:'ai',urgent:false,read:false});
+      if(state.notifs.length>30)state.notifs.pop();
+      saveState();
+      showIsland(i.title,'💡','b',4000);
+      vib([30,50,30]);
+    }
+  },60000);
+}
+// ===== PAGES / NAV / SHEET =====
+function mkNav(title){
+  return h('div',{class:'nav'},
+    h('button',{class:'back press',onclick:closePage},h('span',{class:'ch'},'‹')),
+    h('div',{class:'nav-title'},title),
+    h('div',{class:'nav-sp'})
+  );
+}
+function renderPageOverlay(app){
+  if(!state.page)return;
+  if(state.page==='chat')renderChatPage(app);
+  else if(state.page==='ai')renderAIChat(app);
+  else if(state.page==='call')renderCallPage(app,false);
+  else if(state.page==='newtask')renderNewTask(app);
+  else if(state.page==='newchat')renderNewChat(app);
+  else if(state.page==='globalsearch')renderGlobalSearch(app);
+  else if(state.page==='notifcenter')renderNotifCenter(app);
+  else if(state.page==='allfeatures')renderAllFeatures(app);
+  else if(state.page==='med')renderMed(app);
+  else if(state.page==='safety')renderSafety(app);
+  else if(state.page==='news')renderNews(app);
+  else if(state.page==='calendar')renderCalendar(app);
+  else if(state.page==='vcs-lobby')renderVCSLobby(app);
+  else if(state.page==='vcs-room')renderVCSRoom(app);
+  else if(state.page==='predict')renderPredict(app);
+  else if(state.page==='chains')renderChains(app);
+  else if(state.page==='admin')renderAdmin(app);
+  else if(state.page==='permits')renderPermits(app);
+  else if(state.page==='shift')renderShift(app);
+  else if(state.page==='warehouse')renderWarehouse(app);
+  else if(state.page==='ideas')renderIdeas(app);
+  else if(state.page==='rating')renderRating(app);
+  else if(state.page==='export')renderExport(app);
+  else if(state.page==='formulas')renderFormulas(app);
+  else if(state.page==='pinsetup')renderPinSetup(app);
+  else if(state.page.indexOf('formula:')===0)renderFormula(app,state.page.split(':')[1]);
+  else if(state.page.indexOf('task:')===0)renderTaskDetail(app,state.page.split(':')[1]);
+  else if(state.page.indexOf('employee:')===0)renderEmployeePage(app,state.page.split(':')[1]);
+}
+function closePage(){
+  if(state.page==='call')endCall(true);
+  state.page=null;saveState();render();
+}
+function showSheet(content,title){
+  var existing=$('#sheetOverlay');
+  if(existing)existing.remove();
+  var overlay=h('div',{id:'sheetOverlay',class:'dim on',onclick:function(e){if(e.target===overlay)hideSheet()}});
+  var sheet=h('div',{class:'sheet on',id:'sheet'},
+    h('div',{class:'grab'}),
+    title?h('div',{class:'sh-hd'},h('h4',{},title),h('button',{class:'press',onclick:hideSheet},'Готово')):null,
+    h('div',{class:'sh-body'},content)
+  );
+  var startY=0,curY=0,dragging=false;
+  sheet.addEventListener('touchstart',function(e){startY=e.touches[0].clientY;dragging=true});
+  sheet.addEventListener('touchmove',function(e){if(!dragging)return;curY=e.touches[0].clientY-startY;if(curY>0)sheet.style.transform='translateY('+curY+'px)'});
+  sheet.addEventListener('touchend',function(){if(curY>100)hideSheet();else sheet.style.transform='';dragging=false;curY=0});
+  overlay.appendChild(sheet);
+  document.body.appendChild(overlay);
+}
+function hideSheet(){
+  var o=$('#sheetOverlay');
+  if(!o)return;
+  var s=$('#sheet');
+  if(s)s.style.transform='translateY(105%)';
+  o.classList.remove('on');
+  setTimeout(function(){o.remove()},420);
+}
+// ===== SUPPLIER =====
+function renderSupplierApp(){
+  var app=$('#app');app.innerHTML='';
+  var main=h('div',{class:'main'});
+  var view=h('div',{class:'view on'});
+  view.appendChild(h('div',{class:'large-title'},'Кабинет поставщика'));
+  view.appendChild(h('div',{class:'hdr'},
+    h('div',{style:{flex:'1'}},h('div',{class:'txt-sm cl-m'},'Код: '+state.user.code)),
+    h('button',{class:'hdr-btn press',onclick:function(){state.user=null;saveState();render()}},h('svg',{viewBox:'0 0 24 24'},h('path',{d:'M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9'})))
+  ));
+  view.appendChild(h('div',{class:'hero'},
+    h('div',{class:'live'},h('i'),'КАБИНЕТ ПОСТАВЩИКА'),
+    h('h3',{},state.user.name),
+    h('p',{},'Поставки и уведомления заводу')
+  ));
+  view.appendChild(h('div',{class:'stat-row'},
+    h('div',{class:'stat'},h('small',{},'Активных поставок'),h('b',{},'3')),
+    h('div',{class:'stat'},h('small',{},'В пути'),h('b',{},'1'))
+  ));
+  view.appendChild(h('div',{class:'gtitle'},'Текущие поставки'));
+  [{id:'П-2001',product:'Металлопрокат 40Х',qty:'45 т',status:'В пути'},
+   {id:'П-2002',product:'Лист стальной 8мм',qty:'12 т',status:'Готов к отгрузке'},
+   {id:'П-2003',product:'Труба профильная',qty:'380 п.м.',status:'Доставлено'}
+  ].forEach(function(p){
+    view.appendChild(h('div',{class:'card',style:{padding:'16px'}},
+      h('div',{class:'row between mb'},h('span',{class:'mon txt-sm cl-b bld'},p.id),h('span',{class:'tag '+(p.status==='Доставлено'?'tg-g':p.status==='В пути'?'tg-o':'tg-b')},p.status)),
+      h('b',{},p.product),
+      h('div',{class:'txt-sm cl-m mt'},'Объём: '+p.qty),
+      h('div',{class:'row mt',style:{gap:'8px'}},
+        h('button',{class:'btn sm card press',onclick:function(){p.status='В пути';render();showIsland('Отмечено: в пути','🚚','o')}},'🚚 Отгрузить'),
+        h('button',{class:'btn sm card press',onclick:function(){p.status='Доставлено';render();showIsland('Отмечено: доставлено','✅','g')}},'✅ Доставлено')
+      )
+    ));
+  });
+  view.appendChild(h('button',{class:'btn b full press mt',onclick:function(){showIsland('Уведомление отправлено','📨','g')}},'📨 Отправить уведомление заводу'));
+  main.appendChild(view);
+  app.appendChild(main);
+}
+// ===== INIT =====
+function init(){
+  applyTheme();
+  genPredictions();
+  render();
+  if(state.user&&state.user.role!=='supplier'){
+    startAutonomy();
+  }
+}
+if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',init)}
+else{init()}
+}catch(fatalErr){
+  showError('Критическая ошибка при запуске: '+fatalErr.message, fatalErr.stack);
+}
+})();
+</script>
+</body>
+</html>
